@@ -47,11 +47,11 @@ Fixed in firmware: grain spread, drift (random per-grain detune), output level. 
 
 | Part | Choice | Notes |
 |---|---|---|
-| Pots (×7) | [Alpha RV09AF-40-20K-B10K](https://www.jameco.com/z/RV09AF-40-20K-B10K-Taiwan-Alpha-9mm-Linear-Taper-Potentiometer-10K-Ohm-50mW-20-20mm-Long-Vertical-Knurled-Shaft_2272207.html) (Jameco 2272207): 9 mm, vertical PCB mount, 20 mm knurled plastic shaft, B10K linear | 7.0 mm mounting height. Topped with small translucent knurled press-on caps with a white index line, like the AKS Mini's. An SMD LED beside a pot can light its cap. |
+| Pots (×7) | [Alpha RV09AF-40-20K-B10K](https://www.jameco.com/z/RV09AF-40-20K-B10K-Taiwan-Alpha-9mm-Linear-Taper-Potentiometer-10K-Ohm-50mW-20-20mm-Long-Vertical-Knurled-Shaft_2272207.html) (Jameco 2272207): 9 mm, vertical PCB mount, 20 mm knurled plastic shaft, B10K linear | 7.0 mm mounting height. Used bare, no knobs or caps: the knurled shaft is the grip, with a painted index line across its top face. |
 | Toggles (×2) | E-Switch 100SP1T1B4M2QE, PCB-mount SPDT on-on, 1/4"-40 bushing | 8.89 mm body sets the board-to-panel gap; the body seats against the panel underside and the nut clamps from above. |
 | Footswitches (×2) | Soft-touch momentary SPST, M12 bushing | Panel-mounted, wired to the carrier. |
 
-Board stack: carrier top 8.9 mm under the panel, panel 3.5 mm, so a 20 mm shaft clears the panel by about 7.6 mm if L is measured from the PCB seating plane (about 14.6 mm if from the body top), enough for a press-on cap either way; trim if needed. VERIFY against the datasheet before ordering.
+Board stack: carrier top 8.9 mm under the panel, panel 3.5 mm, so a 20 mm shaft clears the panel by about 7.6 mm if L is measured from the PCB seating plane (about 14.6 mm if from the body top), enough to grip the bare shaft either way; trim if needed. VERIFY against the datasheet before ordering.
 
 ## Repository layout
 
