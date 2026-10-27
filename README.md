@@ -53,6 +53,13 @@ Fixed in firmware: grain spread, drift (random per-grain detune), output level. 
 
 Board stack (from the datasheets): the RV09 pot's shaft length L is measured from the PCB seating plane and its body is 7.0 mm tall, so the carrier sits 7.5 mm under the panel; with the 3.5 mm panel, a 20 mm shaft stands 9 mm above the panel.
 
+## Board assembly
+
+- **Through-hole by hand:** pots, toggles, jacks, Seed headers and LED. Fab through-hole assembly is mostly manual and costs extra, so it isn't worth it for these.
+- **Small parts:** coupling caps, input pad and LED resistors, polyfuse and ESD diode (roughly 15–25 parts). Either use 0805 SMD (or through-hole) and solder them by hand, or have the fab place only these SMD parts from its basic-parts library.
+- **Alignment jig (solder last):** fit the pots, toggles and jacks into the board unsoldered, seat the board on its standoffs in the printed shell, and run the toggle and jack nuts on so every part lines up with its hole. Then solder from the underside. Everything ends up square to the panel and back wall.
+- **Footswitches** are nutted to the panel and plug into 2-pin locking connectors on the carrier after the board is in.
+
 ## Repository layout
 
 ```
