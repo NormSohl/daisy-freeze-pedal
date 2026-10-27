@@ -1,6 +1,6 @@
 # Daisy Freeze Pedal
 
-A line-level stereo freeze/drone floor pedal built on the Electrosmith Daisy Seed, designed for playing hands-free alongside a WARBL wind controller or analog synths. Hold a footswitch to record, release to loop; the loop plays back as a Clouds-style granular freeze with sub-octave, fifth and octave voices.
+A line-level stereo freeze/drone floor pedal built on the Electrosmith Daisy Seed3, designed for playing hands-free alongside a WARBL wind controller or analog synths. Hold a footswitch to record, release to loop; the loop plays back as a Clouds-style granular freeze with sub-octave, fifth and octave voices.
 
 ![Enclosure, front view](enclosure/renders/front.png)
 
@@ -33,13 +33,13 @@ Fixed in firmware: grain spread, drift (random per-grain detune), output level. 
   - Nothing in In R: In L is normalled to both channels.
   - Nothing in Out R: L+R is summed to Out L (detected on a GPIO via the jack switch).
 - Line level in and out; no instrument buffer needed. Optional input pad/trim for hot +4 dBu sources.
-- The Daisy Seed's own micro-USB faces the back wall for 5 V power and firmware updates. Holding Clear at power-up will jump to the bootloader so the case never needs opening to flash.
+- The Seed3's own USB-C faces the back wall for 5 V power and firmware updates. Holding Clear at power-up will jump to the bootloader so the case never needs opening to flash.
 
 ## Hardware plan
 
 - **One carrier PCB** mounted parallel to the panel carries everything except the footswitches:
   - Top side: seven 9 mm PCB-mount pots (plastic shafts), two PCB-mount mini toggles, LED under a light pipe.
-  - Underside, rear edge: four right-angle 1/4" jacks with threaded bushings (nutted to the back wall so plug forces go into the case) and the Daisy Seed on female headers, its micro-USB facing the back wall.
+  - Underside, rear edge: four right-angle 1/4" jacks with threaded bushings (nutted to the back wall so plug forces go into the case) and the Seed3 on female headers, its USB-C facing the back wall.
 - **Footswitches** are nutted to the panel and wired to 2-pin locking connectors on the carrier; stomps never load solder joints.
 - **Enclosure**: reinforced 3D-printed wedge, PETG or ASA. See [`enclosure/`](enclosure/).
 
@@ -47,15 +47,15 @@ Fixed in firmware: grain spread, drift (random per-grain detune), output level. 
 
 | Part | Choice | Notes |
 |---|---|---|
-| Pots (×7) | [Alpha RV09AF-40-20K-B10K](https://www.jameco.com/z/RV09AF-40-20K-B10K-Taiwan-Alpha-9mm-Linear-Taper-Potentiometer-10K-Ohm-50mW-20-20mm-Long-Vertical-Knurled-Shaft_2272207.html) (Jameco 2272207): 9 mm, vertical PCB mount, 20 mm knurled plastic shaft, B10K linear | 7.0 mm mounting height. Used bare, no knobs or caps: the knurled shaft is the grip, with a painted index line across its top face. |
-| Toggles (×2) | E-Switch 100SP1T1B1M2QE: SPDT on-on, PCB mount (M2), threaded 1/4"-40 bushing (B1, 8.89 mm) | Body is 6.6 mm from PCB to bushing base and seats on a 0.9 mm pad under the panel; 4.5 mm of thread above the panel takes the nut. Note: the B4 variant has an unthreaded bushing and can't be nutted to the panel. |
+| Pots (×7) | Alpha RV09AF-40-25K-B10K: 9 mm, vertical PCB mount, 25 mm knurled plastic shaft, B10K linear (same series as [Jameco 2272207](https://www.jameco.com/z/RV09AF-40-20K-B10K-Taiwan-Alpha-9mm-Linear-Taper-Potentiometer-10K-Ohm-50mW-20-20mm-Long-Vertical-Knurled-Shaft_2272207.html), 25 mm length) | 7.6 mm tall body. Used bare, no knobs or caps: the knurled shaft is the grip, with a painted index line across its top face. |
+| Toggles (×2) | E-Switch 100SP1T1B1M2QE: SPDT on-on, PCB mount (M2), threaded 1/4"-40 bushing (B1, 8.89 mm) | Catalog p.2: single-pole body 8.89 mm; M2 drawing p.8: pins stand the body 1.5 mm off the board. Bushing base sits 10.39 mm above the PCB and seats on the panel underside; 5.4 mm of thread above the panel takes the nut. The B4 variant's bushing is unthreaded. |
 | Footswitches (×2) | Soft-touch momentary SPST, M12 bushing | Panel-mounted, wired to the carrier. |
-| Jacks (×4) | Neutrik NMJ6HCD2: 1/4" stereo, switched, horizontal PCB, chrome ferrule with nut | Axis 9.1 mm from the PCB, 18.2 mm wide, 11.4 mm panel cut-out. Mounted on the carrier underside. |
-| Seed sockets | 2× 1×20 female headers, 2.54 mm, 8.5 mm tall | Daisy Seed hangs below the carrier, micro-USB to the back wall. |
-| LED | 5 mm bi-colour red/green, common cathode, 3-lead | Driven from two GPIOs through 470 Ω. |
+| Jacks (×4) | Neutrik NMJ6HCD2: 1/4" stereo, switched, horizontal PCB, chrome ferrule with nut | Axis 7.53 mm from the PCB (drawing: 15.67 body, axis 8.14 below its top), 18.2 mm wide, 11.4 mm panel cut-out, panels under 4.7 mm. Mounted on the carrier underside. |
+| Seed sockets | 2× 1×20 female headers, 2.54 mm, 8.5 mm tall | Seed3 hangs below the carrier on its 2.5 mm header spacer, USB-C to the back wall. |
+| LED | 5 mm bi-colour red/green, common cathode, 3-lead, on a 5 mm LED spacer | Spacer puts the dome 0.3 mm below the panel top. Driven from two GPIOs through 470 Ω; pick R per die once the LED is chosen (a true-green die needs less). |
 | Footswitch connectors (×2) | JST PH 2-pin vertical (B2B-PH-K) | Footswitches are wired to mating plugs. |
 
-Board stack (from the datasheets): the RV09 pot's shaft length L is measured from the PCB seating plane and its body is 7.0 mm tall, so the carrier sits 7.5 mm under the panel; with the 3.5 mm panel, a 20 mm shaft stands 9 mm above the panel.
+Board stack (from the datasheets): the toggle's bushing base sits 10.39 mm above the board, so the carrier hangs 10.39 mm under the 3.5 mm panel. Pot bodies (7.6 mm) sit below the panel and the panel holes bear their shafts. RV09 shaft length L is measured from the PCB, so a 25 mm shaft stands 11.1 mm above the panel.
 
 ## Carrier board
 
@@ -66,23 +66,23 @@ KiCad 7 project in [`pcb/carrier/`](pcb/carrier/): schematic, routed two-layer b
 | Board side | Parts |
 |---|---|
 | Top (faces the panel) | 7 pots, 2 toggles, LED, 2 footswitch connectors, all SMD parts (fab-placed) |
-| Bottom | Daisy Seed on sockets, 4 jacks along the rear edge |
+| Bottom | Seed3 on sockets, 4 jacks along the rear edge |
 
 **Seed pin map**
 
 | Function | Seed pin | Notes |
 |---|---|---|
 | Dry, Loop, −8, +5, +8, Fade, Texture pots | A0–A6 (pins 22–28) | Pot ends on 3V3A / GND; wiper through 1 k / 100 nF RC |
-| Audio in L / R | 16 / 17 | Codec inputs are AC-coupled internally, 3.6 Vpp max; In R is normalled from In L by its tip switch |
-| Audio out L / R | 18 / 19 | 100 Ω output impedance |
+| Audio in L / R | 16 / 17 | Seed3 limit 3.6 Vpp (+4.3 dBu), absolute max ±1.8 V. Each input has a series/shunt pad footprint, fitted as no pad (0 Ω, shunt open); fit 10 k + 10 k for −6 dB with hot sources. In R is normalled from In L's jack tip; In L's tip switch grounds it when empty. |
+| Audio out L / R | 18 / 19 | 10 µF in series and 100 k to ground at each jack, as in the Seed3 reference circuit |
 | Single / Multi toggle | D7 (pin 8) | Toggle switches the pin between 3V3D and DGND |
 | +5 up / down toggle | D8 (pin 9) | Same |
 | Freeze / Clear footswitches | D9 / D10 (pins 10 / 11) | To DGND; use internal pull-ups |
 | LED red / green | D11 / D12 (pins 12 / 13) | 470 Ω each |
-| Out R plug detect | D26 (pin 33) | A TS plug shorts Out R's ring to sleeve, pulling the pin low; 100 k pull-up, 1 k series |
+| Out R plug detect | D26 (pin 33) | Out R's ring is grounded and its ring-normal contact goes to the pin: empty jack reads low, any plug (TS or TRS) reads high. 100 k pull-up, 1 k series. |
 | Power | 3V3A (21), 3V3D (38), AGND (20), DGND (40) | AGND and DGND both tie to one carrier ground (the datasheet requires them joined) |
 
-The Seed is powered from its own micro-USB. VIN is left unconnected.
+The Seed3 is powered from its own USB-C. VIN is left unconnected. Use an isolated or battery USB supply if the mains-grounded synth and amp cause hum.
 
 | Top side | Bottom side (seen from below) |
 |---|---|
@@ -102,7 +102,7 @@ Routing: 0.3 mm tracks, 0.25 mm clearance, 0.8/0.4 mm vias, ground poured on bot
 
 **Ordering**
 - Upload `fab/carrier-gerbers.zip` for a 2-layer, 1.6 mm board (152 × 100 mm).
-- For fab assembly of the 20 SMD parts (top side only), upload `fab/bom-jlc.csv` and `fab/cpl-jlc.csv`. They are all non-polarised 0603/0805 resistors and capacitors, so a 180° rotation can't put one in backwards; just confirm none show up 90° off in the placement preview.
+- For fab assembly of the 26 SMD parts (top side only), upload `fab/bom-jlc.csv` and `fab/cpl-jlc.csv`. They are all non-polarised 0603/0805 resistors and capacitors, so a 180° rotation can't put one in backwards; just confirm none show up 90° off in the placement preview.
 - SMD parts (all JLC basic parts, checked on jlcpcb.com): 1 k UNI-ROYAL 0603WAF1001T5E (C21190), 100 k 0603WAF1003T5E (C25803), 470 Ω 0603WAF4700T5E (C23179), 100 nF YAGEO CC0603KRX7R9BB104 (C14663), 10 µF 25 V Samsung CL21A106KAYNNNE (C15850).
 - All through-hole parts are hand-soldered; see Board assembly below.
 
@@ -110,8 +110,11 @@ Routing: 0.3 mm tracks, 0.25 mm clearance, 0.8/0.4 mm vias, ground poured on bot
 
 **Checked**
 - Jack fit: Neutrik rates the NMJ6HCD2 for panels under 4.7 mm, so the 3 mm printed back wall is fine.
-- Part numbers: all five LCSC numbers match their values and packages.
+- Part numbers: all six LCSC numbers match their values and packages (0 Ω is C21189, UNI-ROYAL 0603WAF0000T5E).
+- Seed3 (datasheet v2.1) pinout is identical to the original Seed; USB-C overhangs the board end by 1.55 mm, so the back-wall slot is 14 × 9 mm.
+- An independent review checked footprints, pin map, wiring and fab files against the datasheets; its fixes are applied.
 - Before printing the full case, a quick test print of the back wall with one jack and nut is still a good idea.
+- With a meter, confirm the NMJ6HCD2 ring-normal (RN) contact opens on plug insertion before relying on Out R detection; the drawing has no contact diagram.
 
 ## Board assembly
 
