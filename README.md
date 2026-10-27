@@ -72,7 +72,7 @@ KiCad 7 project in [`pcb/carrier/`](pcb/carrier/): schematic, routed two-layer b
 
 | Function | Seed pin | Notes |
 |---|---|---|
-| Dry, Loop, −8, +5, +8, Fade, Texture pots | A0–A6 (pins 22–28) | Pot ends on 3V3A / AGND; wiper through 1 k / 100 nF RC |
+| Dry, Loop, −8, +5, +8, Fade, Texture pots | A0–A6 (pins 22–28) | Pot ends on 3V3A / GND; wiper through 1 k / 100 nF RC |
 | Audio in L / R | 16 / 17 | Codec inputs are AC-coupled internally, 3.6 Vpp max; In R is normalled from In L by its tip switch |
 | Audio out L / R | 18 / 19 | 100 Ω output impedance |
 | Single / Multi toggle | D7 (pin 8) | Toggle switches the pin between 3V3D and DGND |
@@ -80,7 +80,7 @@ KiCad 7 project in [`pcb/carrier/`](pcb/carrier/): schematic, routed two-layer b
 | Freeze / Clear footswitches | D9 / D10 (pins 10 / 11) | To DGND; use internal pull-ups |
 | LED red / green | D11 / D12 (pins 12 / 13) | 470 Ω each |
 | Out R plug detect | D26 (pin 33) | A TS plug shorts Out R's ring to sleeve, pulling the pin low; 100 k pull-up, 1 k series |
-| Power | 3V3A (21), 3V3D (38), AGND (20), DGND (40) | AGND and DGND joined once, through R12 (0 Ω) |
+| Power | 3V3A (21), 3V3D (38), AGND (20), DGND (40) | AGND and DGND both tie to one carrier ground (the datasheet requires them joined) |
 
 The Seed is powered from its own micro-USB. VIN is left unconnected.
 
@@ -94,28 +94,29 @@ The Seed is powered from its own micro-USB. VIN is left unconnected.
 cd pcb/carrier
 python3 gen_schematic.py   # writes carrier.kicad_sch and the project libraries
 python3 gen_pcb.py         # reads the netlist and the case geometry, places parts in carrier.kicad_pcb
-python3 route_pcb.py freerouting.jar   # design rules, Freerouting autoroute, AGND pour both layers, DRC report
+python3 route_pcb.py freerouting.jar   # design rules, Freerouting autoroute, GND pour both layers + stitching vias, DRC report
 python3 make_fab.py        # Gerbers + drill (fab/carrier-gerbers.zip), bom-jlc.csv, cpl-jlc.csv
 ```
 
-Routing: 0.3 mm tracks, 0.25 mm clearance, 0.8/0.4 mm vias, AGND poured on both layers. The DRC report (`drc-report.txt`) shows 0 violations and 0 unconnected pads. `route_pcb.py` uses [Freerouting](https://github.com/freerouting/freerouting) 1.9 (Java) and retries until every connection is made.
+Routing: 0.3 mm tracks, 0.25 mm clearance, 0.8/0.4 mm vias, ground poured on both layers and stitched together with a via grid. The DRC report (`drc-report.txt`) shows 0 violations and 0 unconnected pads. `route_pcb.py` uses [Freerouting](https://github.com/freerouting/freerouting) 1.9 (Java) and retries until every connection is made.
 
 **Ordering**
 - Upload `fab/carrier-gerbers.zip` for a 2-layer, 1.6 mm board (152 × 100 mm).
-- For fab assembly of the 21 SMD parts (top side only), upload `fab/bom-jlc.csv` and `fab/cpl-jlc.csv`, then check each part's rotation in the fab's placement preview before confirming.
+- For fab assembly of the 20 SMD parts (top side only), upload `fab/bom-jlc.csv` and `fab/cpl-jlc.csv`. They are all non-polarised 0603/0805 resistors and capacitors, so a 180° rotation can't put one in backwards; just confirm none show up 90° off in the placement preview.
+- SMD parts (all JLC basic parts, checked on jlcpcb.com): 1 k UNI-ROYAL 0603WAF1001T5E (C21190), 100 k 0603WAF1003T5E (C25803), 470 Ω 0603WAF4700T5E (C23179), 100 nF YAGEO CC0603KRX7R9BB104 (C14663), 10 µF 25 V Samsung CL21A106KAYNNNE (C15850).
 - All through-hole parts are hand-soldered; see Board assembly below.
 
 `gen_pcb.py` reads every panel and back-wall position from the OpenSCAD model through `enclosure_params.scad`, so moving a control in the case moves its part on the board. Fitting the Seed's pin rows between the +5 and +8 pots set the top-row spacing to 32 mm; the narrowest gap on the board is 1.2 mm between a pot tab hole and a Seed pin.
 
-**Still open before ordering**
-- Give the autorouted traces a look in KiCad and tidy anything ugly; the AGND pour is broken up in places by signal traces. Electrically complete as is.
-- Confirm the LCSC part numbers on the SMD parts in the fab's parts search.
-- Check that the NMJ6HCD2 ferrule leaves enough thread for its nut through the 3 mm printed back wall; thin the wall around the jacks if not.
+**Checked**
+- Jack fit: Neutrik rates the NMJ6HCD2 for panels under 4.7 mm, so the 3 mm printed back wall is fine.
+- Part numbers: all five LCSC numbers match their values and packages.
+- Before printing the full case, a quick test print of the back wall with one jack and nut is still a good idea.
 
 ## Board assembly
 
 - **Through-hole by hand:** pots, toggles, jacks, Seed headers and LED. Fab through-hole assembly is mostly manual and costs extra, so it isn't worth it for these.
-- **Small parts:** coupling caps, input pad and LED resistors, polyfuse and ESD diode (roughly 15–25 parts). Either use 0805 SMD (or through-hole) and solder them by hand, or have the fab place only these SMD parts from its basic-parts library.
+- **Small parts:** the 20 resistors and capacitors in the pot filters, LED drive and plug detect. Either use 0805 SMD (or through-hole) and solder them by hand, or have the fab place only these SMD parts from its basic-parts library.
 - **Alignment jig (solder last):** fit the pots, toggles and jacks into the board unsoldered, seat the board on its standoffs in the printed shell, and run the toggle and jack nuts on so every part lines up with its hole. Then solder from the underside. Everything ends up square to the panel and back wall.
 - **Footswitches** are nutted to the panel and plug into 2-pin locking connectors on the carrier after the board is in.
 

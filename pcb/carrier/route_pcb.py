@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Route carrier.kicad_pcb: set design rules, autoroute with Freerouting,
-pour AGND on both layers, and write a DRC report.
+pour GND on both layers with stitching vias, and write a DRC report.
 
 Run after gen_pcb.py:
     python3 route_pcb.py /path/to/freerouting.jar
@@ -124,6 +124,57 @@ def pour(board, netname, layers):
     pcbnew.ZONE_FILLER(board).Fill(board.Zones())
 
 
+def seg_dist(px, py, ax, ay, bx, by):
+    dx, dy = bx - ax, by - ay
+    L = dx * dx + dy * dy
+    t = 0 if L == 0 else max(0, min(1, ((px - ax) * dx + (py - ay) * dy) / L))
+    return ((px - ax - t * dx) ** 2 + (py - ay - t * dy) ** 2) ** 0.5
+
+
+def stitch(board, netname, pitch=8.0, keep=1.0):
+    """Tie the two ground pours together with a grid of vias, skipping any
+    spot closer than `keep` mm (plus via radius) to other copper or a hole."""
+    T = pcbnew.ToMM
+    net = board.FindNet(netname)
+    bb = board.GetBoardEdgesBoundingBox()
+    x0, y0, x1, y1 = T(bb.GetLeft()) + 3, T(bb.GetTop()) + 3, T(bb.GetRight()) - 3, T(bb.GetBottom()) - 3
+    obstacles = []      # (kind, geometry, radius)
+    for fp in board.GetFootprints():
+        for p in fp.Pads():
+            r = max(T(p.GetSize().x), T(p.GetSize().y)) / 2
+            obstacles.append(("p", (T(p.GetPosition().x), T(p.GetPosition().y)), r))
+        if fp.GetReference().startswith("H"):
+            obstacles.append(("p", (T(fp.GetPosition().x), T(fp.GetPosition().y)), 3.5))
+    for t in board.GetTracks():
+        if t.GetClass() == "PCB_VIA":
+            obstacles.append(("p", (T(t.GetPosition().x), T(t.GetPosition().y)), T(t.GetWidth()) / 2))
+        else:
+            obstacles.append(("s", (T(t.GetStart().x), T(t.GetStart().y), T(t.GetEnd().x), T(t.GetEnd().y)), T(t.GetWidth()) / 2))
+    added = 0
+    y = y0
+    while y <= y1:
+        x = x0
+        while x <= x1:
+            ok = True
+            for kind, g, r in obstacles:
+                d = ((x - g[0]) ** 2 + (y - g[1]) ** 2) ** 0.5 if kind == "p" else seg_dist(x, y, *g)
+                if d < r + VIA_D / 2 + keep:
+                    ok = False
+                    break
+            if ok:
+                v = pcbnew.PCB_VIA(board)
+                v.SetPosition(pcbnew.VECTOR2I(MM(x), MM(y)))
+                v.SetDrill(MM(VIA_DRILL)); v.SetWidth(MM(VIA_D))
+                v.SetLayerPair(pcbnew.F_Cu, pcbnew.B_Cu); v.SetNet(net)
+                board.Add(v)
+                obstacles.append(("p", (x, y), VIA_D / 2))
+                added += 1
+            x += pitch
+        y += pitch
+    pcbnew.ZONE_FILLER(board).Fill(board.Zones())
+    print("stitching vias:", added)
+
+
 def main():
     jar = sys.argv[1] if len(sys.argv) > 1 else "freerouting.jar"
     board = pcbnew.LoadBoard(PCB)
@@ -138,7 +189,8 @@ def main():
         for z in list(board.Zones()):
             board.Remove(z)
         autoroute(board, jar)
-        pour(board, "AGND", [pcbnew.F_Cu, pcbnew.B_Cu])
+        pour(board, "GND", [pcbnew.F_Cu, pcbnew.B_Cu])
+        stitch(board, "GND")
         board.BuildConnectivity()
         left = board.GetConnectivity().GetUnconnectedCount(True)
         print(f"route attempt {attempt}: {left} unconnected")

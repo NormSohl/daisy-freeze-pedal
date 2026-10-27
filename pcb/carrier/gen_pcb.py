@@ -163,7 +163,6 @@ def main():
     fps["R9"].SetPosition(vec(X(44), Y(68)))
     fps["R10"].SetPosition(vec(X(66), Y(100)))
     fps["R11"].SetPosition(vec(X(66), Y(104)))
-    fps["R12"].SetPosition(vec(X(60), Y(80)))
 
     # silkscreen control names next to the pots (top side)
     names = ["Dry", "Loop", "-8", "+5", "+8", "Fade", "Texture"]
