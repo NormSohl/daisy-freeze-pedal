@@ -91,3 +91,7 @@ Open `bench/index.html` in a browser (Chrome, Safari or Firefox). Power on, star
 - Print the shell face down (panel face on the bed). 4+ perimeters, 40%+ gyroid, 100% infill around the footswitch pads.
 
 Dimensions marked `VERIFY` in the SCAD file depend on the parts you buy: pot body height, footswitch thread length, jack bushing size, USB-C panel module cutout.
+
+## License
+
+MIT. See [LICENSE](LICENSE). Covers the firmware model, bench, enclosure design files and documentation in this repository.
