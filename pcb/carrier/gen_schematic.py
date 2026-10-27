@@ -105,7 +105,7 @@ for i, (label, net, _) in enumerate(POTS):
 part("C8", "Device:C", "10u", C0805, (125, 45), {"1": "+3V3A", "2": "AGND"}, LCSC=LCSC["10u"])
 part("C9", "Device:C", "100n", C0603, (140, 45), {"1": "+3V3A", "2": "AGND"}, LCSC=LCSC["100n"])
 
-JACK_FP = "Connector_Audio:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal"
+JACK_FP = "carrier:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal_FabOnlySilk"
 jacks = [
     ("J3", "In L / Mono", {"T": "IN_L", "TN": None, "R": None, "RN": None, "S": "AGND"}),
     ("J4", "In R (normalled from In L)", {"T": "IN_R", "TN": "IN_L", "R": None, "RN": None, "S": "AGND"}),

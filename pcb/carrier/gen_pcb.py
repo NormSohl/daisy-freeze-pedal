@@ -12,6 +12,7 @@ Leaves the board unrouted: outline, holes, placement and ratsnest only.
 import json, os, re, subprocess, sys, tempfile
 import xml.etree.ElementTree as ET
 import pcbnew
+os.environ.setdefault("KICAD7_FOOTPRINT_DIR", "/usr/share/kicad/footprints")
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SYS_FP = "/usr/share/kicad/footprints"
@@ -128,6 +129,7 @@ def main():
     pots += [("RV%d" % (i + 6), x, P["mid_s"]) for i, x in enumerate(P["mid_pot_x"])]
     for ref, x, s in pots:           # shaft axis sits 7.0 mm behind the pin row
         fps[ref].SetPosition(vec(X(x), Y(s) + 7.0))
+        fps[ref].Reference().SetVisible(False)   # the control name is printed instead
     for ref, x in zip(("SW1", "SW2"), P["toggle_x"]):
         fps[ref].SetPosition(vec(X(x), Y(P["mid_s"])))
     fps["D1"].SetPosition(vec(X(P["led_x"]) - 2.54, Y(P["led_s"])))
