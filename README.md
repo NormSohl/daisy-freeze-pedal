@@ -61,7 +61,7 @@ Open `bench/index.html` in a browser (Chrome, Safari or Firefox). Power on, star
 
 ## Enclosure
 
-- Wedge, front to back only: 3/4" (19 mm) overall at the front edge rising to 67 mm at the back (≈17.7° panel), 150 mm deep, 160 mm wide. Footswitches sit 55 mm up the slope so there's ≈25.8 mm of clearance under the panel for the switch body (the model echoes this value).
+- Wedge, front to back only: 35 mm overall at the front rising to 50 mm at the back (≈5.7° panel), 150 mm deep, 160 mm wide. ≈28 mm of clearance under the panel at the footswitches (the model echoes this value); jacks sit low on the back wall so their bodies pass under the carrier PCB.
 - Flat 5 mm removable bottom plate for a full rubber mat; six M3 SHCS counterbored from below into Ruthex heat-set inserts.
 - Each footswitch: thickened panel pad plus two 8 × 8 mm columns straight down to the bottom plate, so stomps load the floor rather than the panel.
 - Bearing collars around pot shafts; 9 mm kick ridge between the footswitches and the knobs; recessed LED well.

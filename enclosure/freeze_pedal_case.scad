@@ -30,9 +30,10 @@ back_w   = 160;   // outer width at the back
 front_w  = back_w; // outer width at the front (set smaller for a plan taper)
 depth    = 150;   // front to back
 plate_t  = 5;     // bottom plate (thick enough for M3 counterbores from below)
-front_total = 19.05;              // overall front edge height incl. bottom plate (3/4")
+front_total = 35;                // overall front edge height incl. bottom plate
+back_total  = 50;                // overall back edge height incl. bottom plate
 h_front  = front_total - plate_t; // shell height at the front edge (above the bottom plate)
-h_back   = 62;    // shell height at the back edge
+h_back   = back_total - plate_t;  // shell height at the back edge
 wall     = 3;     // side / front / back walls
 top_t    = 3.5;   // top panel thickness
 
@@ -45,16 +46,16 @@ function y_of(s)   = s * cos(slope);
 
 // ── Controls (panel coordinates: x, s) ──────────────────────────────
 // Top row: output levels, left→right as the player sees them
-level_s   = 138;
+level_s   = 125;
 level_x   = [-56, -28, 0, 28, 56];     // Dry, Loop, −8, +5, +8
 // Middle row: Fade, Texture pots + two mini toggles
-mid_s     = 110;
+mid_s     = 92;
 mid_pot_x = [-52, -24];                // Fade, Texture
 toggle_x  = [14, 44];                  // Single/Multi, +5 up/down
 // Footswitch row (Clear left, Freeze right), LED above Freeze
-fs_s      = 55;    // far enough back for footswitch body depth (see echo below)
+fs_s      = 32;    // footswitch clearance below panel is echoed at render
 fs_x      = [-35, 35];
-led_x     = 35;   led_s = 78;
+led_x     = 35;   led_s = 56;
 
 // Hole sizes — VERIFY against the parts you buy
 pot_hole  = 7.0;   // 6 mm plastic shaft, 0.5 mm clearance per side
@@ -64,7 +65,7 @@ led_hole  = 5.3;   // 5 mm LED or light pipe
 led_recess_d = 9; led_recess_h = 1.5;  // shallow well so a shoe can't flatten it
 
 // Kick ridge between the footswitch row and the knob rows
-ridge_s   = 90;
+ridge_s   = 72;
 ridge_w   = 6;
 ridge_h   = 9;     // above panel surface
 
@@ -79,7 +80,7 @@ col_offset    = 20;                         // column centre distance from switc
 col_gap       = 0.2;                        // column foot clearance above bottom plate
 
 // Carrier PCB mounting (hanging M3 standoffs, panel coordinates)
-pcb_mounts = [[-66, 100], [66, 100], [-66, 148], [66, 148]];
+pcb_mounts = [[-66, 80], [66, 80], [-66, 138], [66, 138]];
 
 // Bottom plate screws (world X, Y) — inside corners plus front/back centre
 corner_in = m3_boss_d/2 - 0.5;   // boss centre inset from inner walls (boss fuses 0.5 mm into wall)
@@ -95,7 +96,7 @@ plate_boss_h = 12;
 
 // Back face (world X, height above plate top). Order as the player sees it.
 jack_d    = 9.7;   // 3/8" bushing panel jacks (Switchcraft/Cliff style) — VERIFY
-jack_z    = 20;    // centre height above plate top
+jack_z    = 15;    // centre height above plate top (keeps jack bodies under the carrier PCB)
 jack_x    = [-60, -32, -4, 24];           // In L, In R, Out L, Out R
 usb_x     = 54;  usb_z = 14;
 usb_w     = 9.6; usb_h = 4.0; usb_r = 1.5;  // panel-mount USB-C cutout — VERIFY
