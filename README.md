@@ -113,7 +113,7 @@ Routing: 0.3 mm tracks, 0.25 mm clearance, 0.8/0.4 mm vias, ground poured on bot
 - Part numbers: all six LCSC numbers match their values and packages (0 Ω is C21189, UNI-ROYAL 0603WAF0000T5E).
 - Seed3 (datasheet v2.1) pinout is identical to the original Seed; USB-C overhangs the board end by 1.55 mm, so the back-wall slot is 14 × 9 mm.
 - An independent review checked footprints, pin map, wiring and fab files against the datasheets; its fixes are applied.
-- Before printing the full case, a quick test print of the back wall with one jack and nut is still a good idea.
+- Printed holes often come out slightly undersize: if a jack or toggle won't go in, open the hole with an 11.5 mm drill or step bit (jacks) or a 1/4" bit (toggles).
 - With a meter, confirm the NMJ6HCD2 ring-normal (RN) contact opens on plug insertion before relying on Out R detection; the drawing has no contact diagram.
 
 ## Board assembly
