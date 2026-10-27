@@ -33,12 +33,14 @@ Fixed in firmware: grain spread, drift (random per-grain detune), output level. 
   - Nothing in In R: In L is normalled to both channels.
   - Nothing in Out R: L+R is summed to Out L (detected on a GPIO via the jack switch).
 - Line level in and out; no instrument buffer needed. Optional input pad/trim for hot +4 dBu sources.
-- USB-C on the back for 5 V power and firmware updates. Holding Clear at power-up will jump to the bootloader so the case never needs opening to flash.
+- The Daisy Seed's own micro-USB faces the back wall for 5 V power and firmware updates. Holding Clear at power-up will jump to the bootloader so the case never needs opening to flash.
 
 ## Hardware plan
 
-- **Daisy Seed** socketed on a custom 2-layer carrier PCB mounted parallel to the panel.
-- **Carrier** holds the seven 9 mm PCB-mount pots (plastic shafts), LED, audio coupling caps and pad, and headers for the jacks, footswitches, toggles and USB-C.
+- **One carrier PCB** mounted parallel to the panel carries everything except the footswitches:
+  - Top side: seven 9 mm PCB-mount pots (plastic shafts), two PCB-mount mini toggles, LED under a light pipe.
+  - Underside, rear edge: four right-angle 1/4" jacks with threaded bushings (nutted to the back wall so plug forces go into the case) and the Daisy Seed on female headers, its micro-USB facing the back wall.
+- **Footswitches** are nutted to the panel and wired to 2-pin locking connectors on the carrier; stomps never load solder joints.
 - **Enclosure**: reinforced 3D-printed wedge, PETG or ASA. See [`enclosure/`](enclosure/).
 
 ## Repository layout
@@ -65,6 +67,8 @@ Open `bench/index.html` in a browser (Chrome, Safari or Firefox). Power on, star
 - Flat 5 mm removable bottom plate for a full rubber mat; six M3 SHCS counterbored from below into Ruthex heat-set inserts.
 - Each footswitch: thickened panel pad plus two 8 × 8 mm columns straight down to the bottom plate, so stomps load the floor rather than the panel.
 - Bearing collars around pot shafts; 9 mm kick ridge between the footswitches and the knobs; recessed LED well.
+- Back wall is perpendicular to the panel so the board-mounted jacks meet it square. Jack and USB openings are slots open at the bottom: the carrier slides up into the shell, then the jack nuts clamp it to the wall.
+- `part = "carrier"` renders the board, jacks and Seed as reference geometry for fit checks.
 - Print the shell upside down (panel face on the bed). 4+ perimeters, 40%+ gyroid, 100% infill around the footswitch pads.
 
 Dimensions marked `VERIFY` in the SCAD file depend on the parts you buy: pot body height, footswitch thread length, jack bushing size, USB-C panel module cutout.

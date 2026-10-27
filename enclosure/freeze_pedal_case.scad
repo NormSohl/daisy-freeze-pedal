@@ -9,13 +9,20 @@
 // up the slope from the front edge. on_panel(x, s) puts you on the top surface
 // with +Z pointing out of the panel.
 //
+// Everything except the two footswitches lives on one carrier PCB parallel to
+// the panel: pots, toggles and LED on its top side; the Daisy Seed and the four
+// right-angle 1/4" jacks on its underside along the rear edge. The back wall is
+// perpendicular to the panel so the jacks meet it square, and the jack/USB
+// openings are slots open at the bottom: the board slides up into the shell,
+// then the jack nuts clamp it to the wall from outside.
+//
 // Print: shell upside down (top face on the bed, no supports needed inside
 //        except bridges over jack holes); bottom plate flat.
 // Material: PETG or ASA. 4+ perimeters, 40%+ gyroid infill, 100% around the
 //           footswitch pads (use a modifier in the slicer).
 
 // ── 0. Part switcher ────────────────────────────────────────────────
-part = "assembly"; // [assembly, shell, plate, exploded]
+part = "assembly"; // [assembly, shell, plate, carrier, exploded]
 
 // ── 1. Global constants ─────────────────────────────────────────────
 $fn = 64;
@@ -37,12 +44,14 @@ h_back   = back_total - plate_t;  // shell height at the back edge
 wall     = 3;     // side / front / back walls
 top_t    = 3.5;   // top panel thickness
 
-slope    = atan((h_back - h_front) / depth);   // panel angle, ≈10.6°
+slope    = atan((h_back - h_front) / depth);   // panel angle
 slope_len= depth / cos(slope);
 
 function w_at(y)   = front_w + (back_w - front_w) * y / depth;   // outer width at y
 function ztop(y)   = plate_t + h_front + y * tan(slope);         // top surface z at y
 function y_of(s)   = s * cos(slope);
+// Back wall is perpendicular to the panel, so its foot sits behind y=depth
+depth_b  = depth + (ztop(depth) - plate_t) * tan(slope);   // footprint depth at the floor
 
 // ── Controls (panel coordinates: x, s) ──────────────────────────────
 // Top row: output levels, left→right as the player sees them
@@ -79,28 +88,40 @@ col_size      = 8;                          // square support columns under swit
 col_offset    = 20;                         // column centre distance from switch centre (X)
 col_gap       = 0.2;                        // column foot clearance above bottom plate
 
-// Carrier PCB mounting (hanging M3 standoffs, panel coordinates)
-pcb_mounts = [[-66, 80], [66, 80], [-66, 138], [66, 138]];
+// Carrier PCB (panel coordinates). Footswitches stay off the board: they are
+// nutted to the panel and wired to 2-pin locking connectors on the carrier.
+pcb_t       = 1.6;
+pcb_s0      = 47;                               // front edge, behind the footswitch bodies
+pcb_s1      = slope_len - wall - 0.5;           // rear edge, 0.5 mm off the back wall
+pcb_half_w  = back_w/2 - wall - 1;
+pcb_mounts  = [[-70, 62], [70, 62], [-70, 138], [70, 138]];   // hanging M3 standoffs
+pcb_bot_z   = -(top_t + pcb_gap + pcb_t);       // carrier underside, panel frame
+
+// Underside parts on the rear edge — VERIFY against the parts you buy
+jack_axis_below = 8.5;   // right-angle PCB 1/4" jack: axis below the board underside
+jack_body = [16, 30, 15];// w, length into the case, height (reference only)
+seed_hdr_h  = 8.5;       // female header height
+seed_len = 51; seed_w = 17.8; seed_t = 1.6;     // Daisy Seed
+seed_x   = 50;                                   // Seed centre X; its micro-USB faces the back wall
+usb_axis_below = seed_hdr_h + seed_t + 1.5;      // micro-USB axis below the carrier underside
 
 // Bottom plate screws (world X, Y) — inside corners plus front/back centre
 corner_in = m3_boss_d/2 - 0.5;   // boss centre inset from inner walls (boss fuses 0.5 mm into wall)
+back_boss_y = depth_b - wall / cos(slope) - corner_in;   // fuses to the leaning back wall
 plate_screws = [
   [-(w_at(wall+corner_in)/2 - wall - corner_in), wall + corner_in],
   [  w_at(wall+corner_in)/2 - wall - corner_in,  wall + corner_in],
-  [-(w_at(depth-wall-corner_in)/2 - wall - corner_in), depth - wall - corner_in],
-  [  w_at(depth-wall-corner_in)/2 - wall - corner_in,  depth - wall - corner_in],
+  [-(back_w/2 - wall - corner_in), back_boss_y],
+  [  back_w/2 - wall - corner_in,  back_boss_y],
   [0, wall + corner_in],
-  [0, depth - wall - corner_in]
+  [6, back_boss_y]                     // between Out L and Out R so it clears the jack slots
 ];
-plate_boss_h = 12;
+plate_boss_h = 10;
 
-// Back face (world X, height above plate top). Order as the player sees it.
-jack_d    = 9.7;   // 3/8" bushing panel jacks (Switchcraft/Cliff style) — VERIFY
-jack_z    = 15;    // centre height above plate top (keeps jack bodies under the carrier PCB)
-jack_x    = [-60, -32, -4, 24];           // In L, In R, Out L, Out R
-usb_x     = 54;  usb_z = 14;
-usb_w     = 9.6; usb_h = 4.0; usb_r = 1.5;  // panel-mount USB-C cutout — VERIFY
-usb_screw_sp = 0;                          // set to the module's hole spacing, 0 = none
+// Back face. X as the player sees it (In L at far left).
+jack_d    = 9.7;   // jack bushing — VERIFY (3/8" for Cliff/Switchcraft style)
+jack_x    = [-54, -30, -6, 18];          // In L, In R, Out L, Out R
+usb_open  = [12, 8];                     // micro-USB plug overmould clearance (w, h)
 
 // Note: the panel's true (perpendicular) thickness is top_t·cos(slope), so
 // features that hang from the underside overlap 1 mm short of the face to fuse.
@@ -116,12 +137,14 @@ module on_panel(x, s) {
 }
 
 module wedge(fw, bw, y0, y1, zb, inset_top=0) {
-  // Trapezoid footprint from y0 to y1, flat bottom at zb, top following the slope.
+  // Footprint from y0 to y1, flat bottom at zb, top following the slope.
+  // The back face is perpendicular to the panel, so its foot sits behind y1.
   function hw(y) = (fw + (bw - fw) * y / depth) / 2;
   zt0 = ztop(y0) - inset_top;  zt1 = ztop(y1) - inset_top;
+  y1b = y1 + (zt1 - zb) * tan(slope);
   polyhedron(
     points = [
-      [-hw(y0), y0, zb], [hw(y0), y0, zb], [hw(y1), y1, zb], [-hw(y1), y1, zb],
+      [-hw(y0), y0, zb], [hw(y0), y0, zb], [hw(y1), y1b, zb], [-hw(y1), y1b, zb],
       [-hw(y0), y0, zt0], [hw(y0), y0, zt0], [hw(y1), y1, zt1], [-hw(y1), y1, zt1]
     ],
     faces = [[0,1,2,3],[4,7,6,5],[0,4,5,1],[1,5,6,2],[2,6,7,3],[3,7,4,0]]
@@ -141,7 +164,7 @@ module shell() {
         translate([-ridge_len/2, -ridge_w/2, -1]) cube([ridge_len, ridge_w, ridge_h + 1]);
     }
     // interior cavity, open at the bottom
-    wedge(front_w - 2*wall, back_w - 2*wall, wall, depth - wall, plate_t - eps, top_t);
+    wedge(front_w - 2*wall, back_w - 2*wall, wall, depth - wall*cos(slope) + top_t*sin(slope)*cos(slope), plate_t - eps, top_t);  // puts the inner back face exactly wall-thick, perpendicular to the panel
 
     // panel holes (cut long so they also clear collars/pads added later)
     for (x = level_x)   on_panel(x, level_s) translate([0,0,-20]) cylinder(d=pot_hole, h=30);
@@ -153,14 +176,18 @@ module shell() {
       translate([0,0,-led_recess_h]) cylinder(d=led_recess_d, h=led_recess_h + 1);
     }
 
-    // back-wall jacks and USB-C
-    for (x = jack_x)
-      translate([x, depth + 1, plate_t + jack_z]) rotate([90,0,0]) cylinder(d=jack_d, h=wall + 2);
-    translate([usb_x, depth + 1, plate_t + usb_z]) rotate([90,0,0])
-      linear_extrude(wall + 2) rrect2(usb_w, usb_h, usb_r);
-    if (usb_screw_sp > 0) for (sx = [-1,1])
-      translate([usb_x + sx*usb_screw_sp/2, depth + 1, plate_t + usb_z]) rotate([90,0,0])
-        cylinder(d=m3_cl_d, h=wall + 2);
+    // back-wall slots for the board-mounted jacks and the Seed's micro-USB,
+    // open toward the bottom so the carrier can slide up into place
+    on_panel(0, 0) {
+      for (x = jack_x) translate([x, slope_len - wall - 1, pcb_bot_z - jack_axis_below]) {
+        rotate([-90,0,0]) cylinder(d=jack_d, h=wall + 2);
+        translate([-jack_d/2, 0, -60]) cube([jack_d, wall + 2, 60]);
+      }
+      translate([seed_x, slope_len - wall - 1, pcb_bot_z - usb_axis_below]) {
+        translate([-usb_open[0]/2, 0, -usb_open[1]/2]) cube([usb_open[0], wall + 2, usb_open[1]]);
+        translate([-usb_open[0]/2, 0, -60]) cube([usb_open[0], wall + 2, 60]);
+      }
+    }
   }
 
   // STEP 2 — interior features added after the main difference
@@ -203,7 +230,7 @@ module shell() {
 module plate() {
   difference() {
     linear_extrude(plate_t)
-      polygon([[-front_w/2, 0], [front_w/2, 0], [back_w/2, depth], [-back_w/2, depth]]);
+      polygon([[-front_w/2, 0], [front_w/2, 0], [back_w/2, depth_b], [-back_w/2, depth_b]]);
     // counterbored M3 holes, heads entering from the floor side
     for (p = plate_screws) translate([p[0], p[1], 0]) {
       translate([0,0,-eps]) cylinder(d=m3_cl_d, h=plate_t + 2*eps);
@@ -212,12 +239,29 @@ module plate() {
   }
 }
 
-// ── 7. Render dispatch ──────────────────────────────────────────────
+// ── 7. Carrier PCB (reference geometry for fit checks, not printed) ──
+module carrier() {
+  on_panel(0, 0) {
+    // board
+    color("Goldenrod") translate([-pcb_half_w, pcb_s0, pcb_bot_z]) cube([2*pcb_half_w, pcb_s1 - pcb_s0, pcb_t]);
+    // jacks on the underside, mouths flush with the inside of the back wall
+    color("DimGray") for (x = jack_x)
+      translate([x - jack_body[0]/2, pcb_s1 - jack_body[1], pcb_bot_z - jack_body[2]]) cube(jack_body);
+    // Daisy Seed hanging on headers, micro-USB end at the rear edge
+    color("RoyalBlue") translate([seed_x - seed_w/2, pcb_s1 - seed_len, pcb_bot_z - seed_hdr_h - seed_t])
+      cube([seed_w, seed_len, seed_t]);
+    color("Black") for (dx = [-seed_w/2 + 1.3, seed_w/2 - 3.8])
+      translate([seed_x + dx, pcb_s1 - seed_len + 1, pcb_bot_z - seed_hdr_h]) cube([2.5, seed_len - 2, seed_hdr_h]);
+  }
+}
+
+// ── 8. Render dispatch ──────────────────────────────────────────────
 // shell: print upside down (panel face on the bed)
 // plate: print flat
 if (part == "assembly") {
   color("SeaGreen") shell();
   color("DimGray")  plate();
+  carrier();
 } else if (part == "exploded") {
   color("SeaGreen") translate([0, 0, 40]) shell();
   color("DimGray")  plate();
@@ -225,4 +269,6 @@ if (part == "assembly") {
   shell();
 } else if (part == "plate") {
   plate();
+} else if (part == "carrier") {
+  carrier();
 }
