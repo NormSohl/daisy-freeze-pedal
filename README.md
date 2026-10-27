@@ -47,7 +47,7 @@ Fixed in firmware: grain spread, drift (random per-grain detune), output level. 
 
 | Part | Choice | Notes |
 |---|---|---|
-| Pots (×7) | Alpha RV09AF-40 type, vertical PCB mount, knurled 18T plastic shaft, 20 mm, B10K | 7.0 mm mounting height. Topped with small translucent knurled press-on caps with a white index line, like the AKS Mini's, sitting low on the panel. An SMD LED beside a pot can light its cap. |
+| Pots (×7) | [Alpha RV09AF-40-20K-B10K](https://www.jameco.com/z/RV09AF-40-20K-B10K-Taiwan-Alpha-9mm-Linear-Taper-Potentiometer-10K-Ohm-50mW-20-20mm-Long-Vertical-Knurled-Shaft_2272207.html) (Jameco 2272207): 9 mm, vertical PCB mount, 20 mm knurled plastic shaft, B10K linear | 7.0 mm mounting height. Topped with small translucent knurled press-on caps with a white index line, like the AKS Mini's. An SMD LED beside a pot can light its cap. |
 | Toggles (×2) | E-Switch 100SP1T1B4M2QE, PCB-mount SPDT on-on, 1/4"-40 bushing | 8.89 mm body sets the board-to-panel gap; the body seats against the panel underside and the nut clamps from above. |
 | Footswitches (×2) | Soft-touch momentary SPST, M12 bushing | Panel-mounted, wired to the carrier. |
 
