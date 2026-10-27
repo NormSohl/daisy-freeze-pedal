@@ -76,9 +76,10 @@ led_hole  = 5.3;   // 5 mm LED or light pipe
 
 
 // Under-panel features
-pot_body_h    = 7;                          // 9 mm pot body height — VERIFY
-pcb_gap       = pot_body_h + 0.5;            // carrier sits right under the panel: pot bodies
-                                            // 0.5 mm shy of the underside, so the panel holes bear the shafts
+pot_body_h    = 7;                          // Alpha RV09AF-40 (vertical) mounting height
+toggle_body_h = 8.9;                        // E-Switch 100SP1T1B4M2QE body height (12.7×6.86×8.89 mm)
+pcb_gap       = max(pot_body_h + 0.5, toggle_body_h);  // toggle body seats against the panel underside;
+                                            // pots sit just below and the panel holes bear their shafts
 fs_pad_od     = 30;  fs_pad_h = 1.5;        // thickens panel to top_t+1.5 at switches
                                             // check footswitch thread length vs this
 col_size      = 8;                          // square support columns under switches

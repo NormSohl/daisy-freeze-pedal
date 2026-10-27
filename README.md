@@ -43,6 +43,16 @@ Fixed in firmware: grain spread, drift (random per-grain detune), output level. 
 - **Footswitches** are nutted to the panel and wired to 2-pin locking connectors on the carrier; stomps never load solder joints.
 - **Enclosure**: reinforced 3D-printed wedge, PETG or ASA. See [`enclosure/`](enclosure/).
 
+## Parts chosen so far
+
+| Part | Choice | Notes |
+|---|---|---|
+| Pots (×7) | Alpha RV09AF-40 type, vertical PCB mount, plastic shaft, 25 mm, B10K | 7.0 mm mounting height. No knobs: the bare shaft is turned directly, with a D-flat or painted line as the pointer. Plastic shafts trim easily if 25 mm is long. |
+| Toggles (×2) | E-Switch 100SP1T1B4M2QE, PCB-mount SPDT on-on, 1/4"-40 bushing | 8.89 mm body sets the board-to-panel gap; the body seats against the panel underside and the nut clamps from above. |
+| Footswitches (×2) | Soft-touch momentary SPST, M12 bushing | Panel-mounted, wired to the carrier. |
+
+Board stack: carrier top 8.9 mm under the panel, panel 3.5 mm, so each shaft clears the panel by about 12 mm with 25 mm shafts if L is measured from the PCB seating plane (more if it is measured from the body top). VERIFY against the datasheet before ordering.
+
 ## Repository layout
 
 ```
