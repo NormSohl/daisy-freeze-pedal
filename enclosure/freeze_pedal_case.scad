@@ -70,7 +70,6 @@ led_x     = 35;   led_s = 56;
 // Hole sizes — VERIFY against the parts you buy
 pot_hole  = 7.0;   // 6 mm plastic shaft, 0.5 mm clearance per side
 toggle_hole = 6.5; // E-Switch 100-series 1/4"-40 bushing (datasheet panel hole 6.35)
-                   // panel (top_t) within the bushing thread at pcb_gap — VERIFY
 fs_hole   = 12.4;  // soft-touch footswitch, M12 bushing
 led_hole  = 5.3;   // 5 mm LED or light pipe
 
