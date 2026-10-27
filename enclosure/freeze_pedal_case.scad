@@ -56,8 +56,8 @@ depth_b  = depth + (ztop(depth) - plate_t) * tan(slope);   // footprint depth at
 
 // ── Controls (panel coordinates: x, s) ──────────────────────────────
 // Top row: output levels, left→right as the player sees them
-level_s   = 125;
-level_x   = [-56, -28, 0, 28, 56];     // Dry, Loop, −8, +5, +8
+level_s   = 121;   // pot bodies clear the jack pins coming through from the underside
+level_x   = [-64, -32, 0, 32, 64];     // Dry, Loop, −8, +5, +8 (Seed pins pass between +5 and +8)
 // Middle row: Fade, Texture pots + two mini toggles
 mid_s     = 92;
 mid_pot_x = [-52, -24];                // Fade, Texture
@@ -98,11 +98,11 @@ pcb_mounts  = [[-70, 62], [70, 62], [-70, 138], [70, 138]];   // hanging M3 stan
 pcb_bot_z   = -(top_t + pcb_gap + pcb_t);       // carrier underside, panel frame
 
 // Underside parts on the rear edge — VERIFY against the parts you buy
-jack_axis_below = 8.5;   // right-angle PCB 1/4" jack: axis below the board underside
-jack_body = [16, 30, 15];// w, length into the case, height (reference only)
+jack_axis_below = 9.1;   // Neutrik NMJ6HCD2: axis 9.1 mm from the PCB
+jack_body = [18.2, 23.53, 15.67];  // NMJ6HCD2 body w, length behind the panel flange, height
 seed_hdr_h  = 8.5;       // female header height
 seed_len = 51; seed_w = 17.8; seed_t = 1.6;     // Daisy Seed
-seed_x   = 50;                                   // Seed centre X; its micro-USB faces the back wall
+seed_x   = 48;                                   // Seed centre X; its micro-USB faces the back wall
 usb_axis_below = seed_hdr_h + seed_t + 1.5;      // micro-USB axis below the carrier underside
 
 // Bottom plate screws (world X, Y) — inside corners plus front/back centre
@@ -119,7 +119,7 @@ plate_screws = [
 plate_boss_h = 10;
 
 // Back face. X as the player sees it (In L at far left).
-jack_d    = 9.7;   // jack bushing — VERIFY (3/8" for Cliff/Switchcraft style)
+jack_d    = 11.4;  // NMJ6HCD2 panel cut-out (datasheet); nut A/F 11
 jack_x    = [-54, -30, -6, 18];          // In L, In R, Out L, Out R
 usb_open  = [12, 8];                     // micro-USB plug overmould clearance (w, h)
 
