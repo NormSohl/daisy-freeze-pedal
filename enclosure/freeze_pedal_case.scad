@@ -69,17 +69,20 @@ led_x     = 35;   led_s = 56;
 
 // Hole sizes — VERIFY against the parts you buy
 pot_hole  = 7.0;   // 6 mm plastic shaft, 0.5 mm clearance per side
-toggle_hole = 6.5; // PCB-mount mini toggle, 1/4"-40 bushing; body height must put the
+toggle_hole = 6.5; // E-Switch 100-series 1/4"-40 bushing (datasheet panel hole 6.35)
                    // panel (top_t) within the bushing thread at pcb_gap — VERIFY
 fs_hole   = 12.4;  // soft-touch footswitch, M12 bushing
 led_hole  = 5.3;   // 5 mm LED or light pipe
 
 
 // Under-panel features
-pot_body_h    = 7;                          // Alpha RV09AF-40 (vertical) mounting height
-toggle_body_h = 8.9;                        // E-Switch 100SP1T1B4M2QE body height (12.7×6.86×8.89 mm)
-pcb_gap       = max(pot_body_h + 0.5, toggle_body_h);  // toggle body seats against the panel underside;
-                                            // pots sit just below and the panel holes bear their shafts
+pot_body_h    = 7;                          // Alpha RV09AF-40 (vertical) mounting height;
+                                            // shaft length L is measured from the PCB seating plane
+toggle_body_h = 6.6;                        // E-Switch 100SP1T1B1M2QE: PCB to bushing base (M2 drawing)
+toggle_bush_l = 8.89;                       // B1 threaded 1/4-40 bushing length
+pcb_gap       = max(pot_body_h + 0.5, toggle_body_h);  // pots set the gap; the panel holes bear their shafts
+toggle_pad_h  = pcb_gap - toggle_body_h;    // underside pad so each toggle body seats on the panel
+toggle_pad_od = 12;
 fs_pad_od     = 30;  fs_pad_h = 1.5;        // thickens panel to top_t+1.5 at switches
                                             // check footswitch thread length vs this
 col_size      = 8;                          // square support columns under switches
@@ -128,6 +131,8 @@ usb_open  = [12, 8];                     // micro-USB plug overmould clearance (
 fs_clear = ztop(y_of(fs_s)) - plate_t - top_t - fs_pad_h;
 echo(str("Footswitch clearance below panel: ", fs_clear, " mm (check switch body + lugs)"));
 echo(str("Panel slope: ", slope, " deg"));
+echo(str("20 mm pot shaft above panel: ", 20 - pcb_gap - top_t, " mm"));
+echo(str("Toggle thread above panel: ", toggle_bush_l - toggle_pad_h - top_t, " mm (1/4-40 nut ≈2.4 mm)"));
 
 // ── 4. Helpers ──────────────────────────────────────────────────────
 module on_panel(x, s) {
@@ -185,6 +190,12 @@ module shell() {
   }
 
   // STEP 2 — interior features added after the main difference
+
+  // toggle pads: the toggle body seats on these, its nut clamps from above
+  if (toggle_pad_h > 0.05) for (x = toggle_x) on_panel(x, mid_s) difference() {
+    translate([0,0,-top_t - toggle_pad_h]) cylinder(d=toggle_pad_od, h=toggle_pad_h + top_t - 1);
+    translate([0,0,-top_t - toggle_pad_h - 1]) cylinder(d=toggle_hole, h=toggle_pad_h + top_t + 2);
+  }
 
   // footswitch pads: thicken the panel locally
   for (x = fs_x) on_panel(x, fs_s) difference() {

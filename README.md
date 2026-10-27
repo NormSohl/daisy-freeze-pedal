@@ -48,10 +48,10 @@ Fixed in firmware: grain spread, drift (random per-grain detune), output level. 
 | Part | Choice | Notes |
 |---|---|---|
 | Pots (×7) | [Alpha RV09AF-40-20K-B10K](https://www.jameco.com/z/RV09AF-40-20K-B10K-Taiwan-Alpha-9mm-Linear-Taper-Potentiometer-10K-Ohm-50mW-20-20mm-Long-Vertical-Knurled-Shaft_2272207.html) (Jameco 2272207): 9 mm, vertical PCB mount, 20 mm knurled plastic shaft, B10K linear | 7.0 mm mounting height. Used bare, no knobs or caps: the knurled shaft is the grip, with a painted index line across its top face. |
-| Toggles (×2) | E-Switch 100SP1T1B4M2QE, PCB-mount SPDT on-on, 1/4"-40 bushing | 8.89 mm body sets the board-to-panel gap; the body seats against the panel underside and the nut clamps from above. |
+| Toggles (×2) | E-Switch 100SP1T1B1M2QE: SPDT on-on, PCB mount (M2), threaded 1/4"-40 bushing (B1, 8.89 mm) | Body is 6.6 mm from PCB to bushing base and seats on a 0.9 mm pad under the panel; 4.5 mm of thread above the panel takes the nut. Note: the B4 variant has an unthreaded bushing and can't be nutted to the panel. |
 | Footswitches (×2) | Soft-touch momentary SPST, M12 bushing | Panel-mounted, wired to the carrier. |
 
-Board stack: carrier top 8.9 mm under the panel, panel 3.5 mm, so a 20 mm shaft clears the panel by about 7.6 mm if L is measured from the PCB seating plane (about 14.6 mm if from the body top), enough to grip the bare shaft either way; trim if needed. VERIFY against the datasheet before ordering.
+Board stack (from the datasheets): the RV09 pot's shaft length L is measured from the PCB seating plane and its body is 7.0 mm tall, so the carrier sits 7.5 mm under the panel; with the 3.5 mm panel, a 20 mm shaft stands 9 mm above the panel.
 
 ## Repository layout
 
