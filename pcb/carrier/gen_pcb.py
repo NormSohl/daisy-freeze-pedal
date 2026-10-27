@@ -140,7 +140,7 @@ def main():
 
     # ── bottom side: jacks along the rear edge, Seed with USB to the back ──
     flange_s = P["slope_len"] - P["wall"]          # inside face of the back wall
-    for ref, jx in zip(("J3", "J4", "J5", "J6"), P["jack_x"]):
+    for ref, jx in zip(("J3", "J4", "J5"), P["jack_x"]):
         fp = fps[ref]
         orient(fp, True, "up", "T", "S")            # T->S runs along the axis toward the nose
         tx, ty = pad_xy(fp, "T")
@@ -152,20 +152,10 @@ def main():
     p1, p40 = pad_xy(seed, "1"), pad_xy(seed, "40")
     move_so(seed, ((p1[0] + p40[0]) / 2, p1[1]), (X(P["seed_x"]), Y(s1 - 1.37)))
 
-    # ── top side small parts (fab-placed SMD) ───────────────────────
-    for i in range(7):
-        x = -60 + i * 8
-        fps[f"R{i+1}"].SetPosition(vec(X(x), Y(76)))
-        fps[f"C{i+1}"].SetPosition(vec(X(x), Y(70)))
-    fps["C8"].SetPosition(vec(X(-4), Y(76)))
-    fps["C9"].SetPosition(vec(X(-4), Y(70)))
-    fps["R8"].SetPosition(vec(X(44), Y(64)))
-    fps["R9"].SetPosition(vec(X(44), Y(68)))
-    fps["R10"].SetPosition(vec(X(66), Y(100)))
-    fps["R11"].SetPosition(vec(X(66), Y(104)))
-    # input pads and output coupling, between the top pot row and the toggles
-    for ref, x, ss in [("R15", -56, 106), ("R16", -56, 102), ("R17", -34, 106), ("R18", -34, 102),
-                       ("C10", -10, 106), ("R13", -10, 102), ("C11", 22, 106), ("R14", 22, 102)]:
+    # ── top side through-hole parts ─────────────────────────────────
+    # LED resistors beside the LED; output coupling between the pot row and the toggles
+    for ref, x, ss in [("R1", 46, 64), ("R2", 46, 70),
+                       ("C1", -20, 104), ("R3", -20, 99), ("C2", 2, 104), ("R4", 2, 99)]:
         fps[ref].SetPosition(vec(X(x), Y(ss)))
 
     # silkscreen control names next to the pots (top side)
@@ -178,7 +168,7 @@ def main():
         t.SetPosition(vec(X(x), Y(s) + 9.5))
         board.Add(t)
     t = pcbnew.PCB_TEXT(board)
-    t.SetText("Daisy Freeze Pedal carrier rev A")
+    t.SetText("Daisy Freeze Pedal carrier rev B")
     t.SetLayer(pcbnew.F_SilkS)
     t.SetTextSize(vec(1.5, 1.5))
     t.SetPosition(vec(X(-50), Y(58)))

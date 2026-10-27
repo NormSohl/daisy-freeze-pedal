@@ -68,13 +68,9 @@ def write_seed_symbol(path):
 
 
 # ── Parts and nets (the single source of truth) ──────────────────────
-R0603, C0603, C0805 = "Resistor_SMD:R_0603_1608Metric", "Capacitor_SMD:C_0603_1608Metric", "Capacitor_SMD:C_0805_2012Metric"
-# LCSC numbers for fab placement.
-LCSC = {"1k": "C21190", "100k": "C25803", "470": "C23179", "100n": "C14663", "10u": "C15850", "0R": "C21189"}
-# Verified on jlcpcb.com part pages, 2026-10-26: all JLC basic parts.
-SMD_MPN = {"1k": "UNI-ROYAL 0603WAF1001T5E", "100k": "UNI-ROYAL 0603WAF1003T5E", "470": "UNI-ROYAL 0603WAF4700T5E",
-           "100n": "YAGEO CC0603KRX7R9BB104", "10u": "Samsung CL21A106KAYNNNE (25 V X5R)",
-           "0R": "UNI-ROYAL 0603WAF0000T5E"}
+# Bare board, hand-soldered, all through-hole. Mono in, stereo out.
+R_TH = "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+C_TH = "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 
 POTS = [("Dry", "POT_DRY", 22), ("Loop", "POT_LOOP", 23), ("−8", "POT_SUB", 24),
         ("+5", "POT_FIFTH", 25), ("+8", "POT_OCT", 26), ("Fade", "POT_FADE", 27),
@@ -89,54 +85,36 @@ def part(ref, lib, value, fp, at, pins, rot=0, dnp=False, **fields):
 
 
 seed_nets = {n: None for n in SEED_PINS}
-seed_nets.update({16: "IN_L", 17: "IN_R", 18: "OUT_L", 19: "OUT_R", 20: "GND", 21: "+3V3A",
+seed_nets.update({16: "AUDIO_IN", 17: "AUDIO_IN", 18: "OUT_L", 19: "OUT_R", 20: "GND", 21: "+3V3A",
                   38: "+3V3D", 40: "GND",
                   8: "TGL_LAYERS", 9: "TGL_FIFTH_DIR", 10: "FS_FREEZE", 11: "FS_CLEAR",
                   12: "LED_RED_DRV", 13: "LED_GRN_DRV", 33: "OUTR_DETECT"})
 for _, net, pin in POTS:
-    seed_nets[pin] = "ADC_" + net[4:]
-part("U1", "carrier:DaisySeed", "Daisy Seed", "carrier:DaisySeed_Socket_2x20", (210, 150), seed_nets,
-     MPN="Electrosmith Daisy Seed (on 2x 1x20 female headers)")
+    seed_nets[pin] = net      # wiper straight to the ADC pin; the firmware smooths readings
+part("U1", "carrier:DaisySeed", "Daisy Seed3", "carrier:DaisySeed_Socket_2x20", (210, 150), seed_nets,
+     MPN="Electrosmith Daisy Seed3 (on 2x 1x20 female headers)")
 
 for i, (label, net, _) in enumerate(POTS):
-    y = 40 + i * 30
-    adc = "ADC_" + net[4:]
     part(f"RV{i+1}", "Device:R_Potentiometer", f"B10K {label}", "carrier:Potentiometer_Alpha_RV09AF-40_Vertical",
-         (50, y), {"1": "GND", "2": net, "3": "+3V3A"}, MPN="Alpha RV09AF-40-25K-B10K (25 mm knurled shaft)")
-    part(f"R{i+1}", "Device:R", "1k", R0603, (75, y), {"1": net, "2": adc}, rot=90, LCSC=LCSC["1k"], MPN=SMD_MPN["1k"])
-    part(f"C{i+1}", "Device:C", "100n", C0603, (95, y), {"1": adc, "2": "GND"}, LCSC=LCSC["100n"], MPN=SMD_MPN["100n"])
-
-part("C8", "Device:C", "10u", C0805, (125, 45), {"1": "+3V3A", "2": "GND"}, LCSC=LCSC["10u"], MPN=SMD_MPN["10u"])
-part("C9", "Device:C", "100n", C0603, (140, 45), {"1": "+3V3A", "2": "GND"}, LCSC=LCSC["100n"], MPN=SMD_MPN["100n"])
+         (50, 40 + i * 30), {"1": "GND", "2": net, "3": "+3V3A"}, MPN="Alpha RV09AF-40-25K-B10K (25 mm knurled shaft)")
 
 JACK_FP = "carrier:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal_FabOnlySilk"
 jacks = [
-    ("J3", "In L / Mono (grounded when empty)", {"T": "JIN_L", "TN": "GND", "R": None, "RN": None, "S": "GND"}),
-    ("J4", "In R (normalled from In L)", {"T": "JIN_R", "TN": "JIN_L", "R": None, "RN": None, "S": "GND"}),
-    ("J5", "Out L / Mono", {"T": "JOUT_L", "TN": None, "R": None, "RN": None, "S": "GND"}),
-    ("J6", "Out R (ring switch = plug detect)", {"T": "JOUT_R", "TN": None, "R": "GND", "RN": "OUTR_SENSE", "S": "GND"}),
+    ("J3", "In (mono; grounded when empty)", {"T": "AUDIO_IN", "TN": "GND", "R": None, "RN": None, "S": "GND"}),
+    ("J4", "Out L / Mono", {"T": "JOUT_L", "TN": None, "R": None, "RN": None, "S": "GND"}),
+    ("J5", "Out R (ring switch = plug detect)", {"T": "JOUT_R", "TN": None, "R": "GND", "RN": "OUTR_DETECT", "S": "GND"}),
 ]
 for i, (ref, val, pins) in enumerate(jacks):
-    part(ref, "Connector_Audio:AudioJack3_SwitchTR", val, JACK_FP, (330, 45 + i * 38), pins, rot=180,
+    part(ref, "Connector_Audio:AudioJack3_SwitchTR", val, JACK_FP, (330, 45 + i * 50), pins, rot=180,
          MPN="Neutrik NMJ6HCD2")
-part("R10", "Device:R", "1k", R0603, (370, 165), {"1": "OUTR_SENSE", "2": "OUTR_DETECT"}, rot=90, LCSC=LCSC["1k"], MPN=SMD_MPN["1k"])
-part("R11", "Device:R", "100k", R0603, (390, 155), {"1": "+3V3D", "2": "OUTR_DETECT"}, LCSC=LCSC["100k"], MPN=SMD_MPN["100k"])
 
-# Input pads: series + shunt per channel. Fitted as no pad (0R series, shunt not fitted).
-# For a -6 dB pad, fit 10k in R15/R17 and 10k in R16/R18.
-part("R15", "Device:R", "0R", R0603, (395, 45), {"1": "JIN_L", "2": "IN_L"}, rot=90, LCSC=LCSC["0R"], MPN=SMD_MPN["0R"],
-     Note="Input pad series: 0R = no pad; 10k with R16 = -6 dB")
-part("R16", "Device:R", "DNP 10k", R0603, (410, 55), {"1": "IN_L", "2": "GND"}, dnp=True,
-     Note="Input pad shunt: not fitted by default")
-part("R17", "Device:R", "0R", R0603, (395, 83), {"1": "JIN_R", "2": "IN_R"}, rot=90, LCSC=LCSC["0R"], MPN=SMD_MPN["0R"],
-     Note="Input pad series: 0R = no pad; 10k with R18 = -6 dB")
-part("R18", "Device:R", "DNP 10k", R0603, (410, 93), {"1": "IN_R", "2": "GND"}, dnp=True,
-     Note="Input pad shunt: not fitted by default")
-# Output coupling (Seed3 reference circuit puts 10u in series at each output)
-part("C10", "Device:C", "10u", C0805, (395, 121), {"1": "OUT_L", "2": "JOUT_L"}, rot=90, LCSC=LCSC["10u"], MPN=SMD_MPN["10u"])
-part("R13", "Device:R", "100k", R0603, (410, 131), {"1": "JOUT_L", "2": "GND"}, LCSC=LCSC["100k"], MPN=SMD_MPN["100k"])
-part("C11", "Device:C", "10u", C0805, (395, 200), {"1": "OUT_R", "2": "JOUT_R"}, rot=90, LCSC=LCSC["10u"], MPN=SMD_MPN["10u"])
-part("R14", "Device:R", "100k", R0603, (410, 210), {"1": "JOUT_R", "2": "GND"}, LCSC=LCSC["100k"], MPN=SMD_MPN["100k"])
+# Output coupling (Seed3 reference circuit puts 10u in series at each output); 100k bleeds DC so plugging in doesn't pop
+part("C1", "Device:C", "10u", C_TH, (395, 95), {"1": "OUT_L", "2": "JOUT_L"}, rot=90,
+     MPN="10 uF 25 V X7R radial MLCC, 5.08 mm leads (e.g. TDK FG28X7R1E106KRT06)")
+part("R3", "Device:R", "100k", R_TH, (410, 105), {"1": "JOUT_L", "2": "GND"}, MPN="100k 1/4 W metal film")
+part("C2", "Device:C", "10u", C_TH, (395, 145), {"1": "OUT_R", "2": "JOUT_R"}, rot=90,
+     MPN="10 uF 25 V X7R radial MLCC, 5.08 mm leads (e.g. TDK FG28X7R1E106KRT06)")
+part("R4", "Device:R", "100k", R_TH, (410, 155), {"1": "JOUT_R", "2": "GND"}, MPN="100k 1/4 W metal film")
 
 part("SW1", "Switch:SW_SPDT", "Single / Multi", "carrier:SW_E-Switch_100SP_M2_PCB", (300, 225),
      {"1": "GND", "2": "TGL_LAYERS", "3": "+3V3D"}, MPN="E-Switch 100SP1T1B1M2QE")
@@ -150,9 +128,9 @@ part("J2", "Connector_Generic:Conn_01x02", "Clear footswitch", FS_FP, (140, 250)
      MPN="JST B2B-PH-K; footswitch: soft-touch momentary SPST, panel mounted")
 
 part("D1", "Device:LED_Dual_AKA", "Red/Green", "LED_THT:LED_D5.0mm-3", (230, 245),
-     {"1": "LED_RED", "2": "GND", "3": "LED_GRN"}, MPN="5 mm bi-colour LED, common cathode (red/green)")
-part("R8", "Device:R", "470", R0603, (200, 240), {"1": "LED_RED_DRV", "2": "LED_RED"}, rot=90, LCSC=LCSC["470"], MPN=SMD_MPN["470"])
-part("R9", "Device:R", "470", R0603, (200, 252), {"1": "LED_GRN_DRV", "2": "LED_GRN"}, rot=90, LCSC=LCSC["470"], MPN=SMD_MPN["470"])
+     {"1": "LED_RED", "2": "GND", "3": "LED_GRN"}, MPN="5 mm bi-colour LED, common cathode (red/green), on a 5 mm spacer")
+part("R1", "Device:R", "470", R_TH, (200, 240), {"1": "LED_RED_DRV", "2": "LED_RED"}, rot=90, MPN="470R 1/4 W (choose per LED)")
+part("R2", "Device:R", "470", R_TH, (200, 252), {"1": "LED_GRN_DRV", "2": "LED_GRN"}, rot=90, MPN="470R 1/4 W (choose per LED)")
 
 
 for i in range(4):
@@ -193,7 +171,7 @@ def main():
     out = [f'(kicad_sch (version 20230121) (generator gen_schematic)\n  (uuid {ROOT_UUID})\n  (paper "A3")',
            '  (title_block (title "Daisy Freeze Pedal - carrier board") (date "2026-10-26") (rev "A")\n'
            '    (comment 1 "Generated by gen_schematic.py from one netlist definition - edit the script, not the sheet")\n'
-           '    (comment 2 "Pots/toggles/LED on top side; Seed + jacks on bottom side; footswitches off-board on JST PH")\n'
+           '    (comment 2 "Bare board, all through-hole. Pots/toggles/LED on top; Seed3 + jacks underneath; footswitches on JST PH")\n'
            '    (comment 3 "One carrier ground: Seed AGND (pin 20) and DGND (pin 40) both tie to the GND pour"))']
 
     # embedded library symbols
@@ -242,10 +220,10 @@ def main():
 
     out += labels + ncs
     notes = [
-        (20, 262, "Pots: CCW end (1) to GND, CW end (3) to +3V3A, wiper through 1k / 100n RC into the ADC pin."),
-        (20, 267, "In R is normalled from In L's jack tip; In L's tip switch grounds it when nothing is plugged in."),
-        (20, 272, "Out R plug detect: ring tied to GND, ring-normal contact to OUTR_DETECT. Empty jack: RN touches the ring"),
-        (20, 277, "spring, so the pin reads low; any plug (TS or TRS) lifts it and the 100k pulls high. Low = sum to Out L."),
+        (20, 262, "Pots: CCW end (1) to GND, CW end (3) to +3V3A, wiper straight to the ADC pin; firmware smooths readings."),
+        (20, 267, "Mono in feeds both codec inputs; the In jack's tip switch grounds the input when nothing is plugged in."),
+        (20, 272, "Out R plug detect: ring tied to GND, ring-normal contact to D26 (internal pull-up). Empty jack reads low,"),
+        (20, 277, "any plug reads high. Low = firmware sums to Out L. Toggles and footswitches use no resistors."),
     ]
     for i, (nx, ny, t) in enumerate(notes):
         out.append(f'  (text "{esc(t)}" (at {nx} {ny} 0) (effects (font (size 1.5 1.5)) (justify left bottom)) (uuid {uid("note"+str(i))}))')

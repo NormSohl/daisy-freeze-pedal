@@ -123,7 +123,7 @@ plate_boss_h = 10;
 
 // Back face. X as the player sees it (In L at far left).
 jack_d    = 11.4;  // NMJ6HCD2 panel cut-out (datasheet); nut A/F 11
-jack_x    = [-54, -30, -6, 18];          // In L, In R, Out L, Out R
+jack_x    = [-48, -14, 12];              // In (mono), Out L, Out R
 usb_open  = [14, 9];                     // USB-C plug overmould clearance (w, h); many overmoulds are 12–12.5 mm wide
 
 // Note: the panel's true (perpendicular) thickness is top_t·cos(slope), so
