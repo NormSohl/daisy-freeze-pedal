@@ -66,9 +66,11 @@ Open `bench/index.html` in a browser (Chrome, Safari or Firefox). Power on, star
 - Wedge, front to back only: 35 mm overall at the front rising to 50 mm at the back (≈5.7° panel), 150 mm deep, 160 mm wide. ≈28 mm of clearance under the panel at the footswitches (the model echoes this value); jacks sit low on the back wall so their bodies pass under the carrier PCB.
 - Flat 5 mm removable bottom plate for a full rubber mat; six M3 SHCS counterbored from below into Ruthex heat-set inserts.
 - Each footswitch: thickened panel pad plus two 8 × 8 mm columns straight down to the bottom plate, so stomps load the floor rather than the panel.
-- Bearing collars around pot shafts; 9 mm kick ridge between the footswitches and the knobs; recessed LED well.
+- Panel face is completely flat (no ridges or recesses) so the shell prints face-down without supports; the back wall, square to the panel, prints vertical. The carrier sits 7.5 mm under the panel and the panel holes bear the pot shafts.
+
+![Section through a jack](enclosure/renders/section.png)
 - Back wall is perpendicular to the panel so the board-mounted jacks meet it square. Jack and USB openings are slots open at the bottom: the carrier slides up into the shell, then the jack nuts clamp it to the wall.
 - `part = "carrier"` renders the board, jacks and Seed as reference geometry for fit checks.
-- Print the shell upside down (panel face on the bed). 4+ perimeters, 40%+ gyroid, 100% infill around the footswitch pads.
+- Print the shell face down (panel face on the bed). 4+ perimeters, 40%+ gyroid, 100% infill around the footswitch pads.
 
 Dimensions marked `VERIFY` in the SCAD file depend on the parts you buy: pot body height, footswitch thread length, jack bushing size, USB-C panel module cutout.

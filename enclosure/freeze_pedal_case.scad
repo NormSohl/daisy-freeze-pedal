@@ -16,8 +16,9 @@
 // openings are slots open at the bottom: the board slides up into the shell,
 // then the jack nuts clamp it to the wall from outside.
 //
-// Print: shell upside down (top face on the bed, no supports needed inside
-//        except bridges over jack holes); bottom plate flat.
+// Print: shell face down. The panel face is completely flat (no ridges or
+//        recesses) and the back wall is square to it, so it prints with no
+//        supports; jack slots print as upright U-shapes. Bottom plate flat.
 // Material: PETG or ASA. 4+ perimeters, 40%+ gyroid infill, 100% around the
 //           footswitch pads (use a modifier in the slicer).
 
@@ -68,20 +69,16 @@ led_x     = 35;   led_s = 56;
 
 // Hole sizes — VERIFY against the parts you buy
 pot_hole  = 7.0;   // 6 mm plastic shaft, 0.5 mm clearance per side
-toggle_hole = 6.5; // mini toggle, 1/4"-40 bushing
+toggle_hole = 6.5; // PCB-mount mini toggle, 1/4"-40 bushing; body height must put the
+                   // panel (top_t) within the bushing thread at pcb_gap — VERIFY
 fs_hole   = 12.4;  // soft-touch footswitch, M12 bushing
 led_hole  = 5.3;   // 5 mm LED or light pipe
-led_recess_d = 9; led_recess_h = 1.5;  // shallow well so a shoe can't flatten it
 
-// Kick ridge between the footswitch row and the knob rows
-ridge_s   = 72;
-ridge_w   = 6;
-ridge_h   = 9;     // above panel surface
 
 // Under-panel features
-pot_collar_od = 12;  pot_collar_h = 2;      // bearing collar around each shaft
 pot_body_h    = 7;                          // 9 mm pot body height — VERIFY
-pcb_gap       = pot_body_h + pot_collar_h + 0.5;  // panel underside to carrier PCB top
+pcb_gap       = pot_body_h + 0.5;            // carrier sits right under the panel: pot bodies
+                                            // 0.5 mm shy of the underside, so the panel holes bear the shafts
 fs_pad_od     = 30;  fs_pad_h = 1.5;        // thickens panel to top_t+1.5 at switches
                                             // check footswitch thread length vs this
 col_size      = 8;                          // square support columns under switches
@@ -155,25 +152,21 @@ module rrect2(w, h, r) { offset(r=r) square([w - 2*r, h - 2*r], center=true); }
 
 // ── 5. Shell ────────────────────────────────────────────────────────
 module shell() {
-  // STEP 1 — outer body + ridge, minus cavity and every through-cut
+  // STEP 1 — outer body, minus cavity and every through-cut
   difference() {
     union() {
       wedge(front_w, back_w, 0, depth, plate_t);
-      ridge_len = w_at(y_of(ridge_s)) - 2*wall - 8;
-      on_panel(0, ridge_s)
-        translate([-ridge_len/2, -ridge_w/2, -1]) cube([ridge_len, ridge_w, ridge_h + 1]);
     }
     // interior cavity, open at the bottom
     wedge(front_w - 2*wall, back_w - 2*wall, wall, depth - wall*cos(slope) + top_t*sin(slope)*cos(slope), plate_t - eps, top_t);  // puts the inner back face exactly wall-thick, perpendicular to the panel
 
-    // panel holes (cut long so they also clear collars/pads added later)
+    // panel holes (cut long so they also clear the footswitch pads added later)
     for (x = level_x)   on_panel(x, level_s) translate([0,0,-20]) cylinder(d=pot_hole, h=30);
     for (x = mid_pot_x) on_panel(x, mid_s)   translate([0,0,-20]) cylinder(d=pot_hole, h=30);
     for (x = toggle_x)  on_panel(x, mid_s)   translate([0,0,-20]) cylinder(d=toggle_hole, h=30);
     for (x = fs_x)      on_panel(x, fs_s)    translate([0,0,-20]) cylinder(d=fs_hole, h=30);
     on_panel(led_x, led_s) {
       translate([0,0,-20]) cylinder(d=led_hole, h=30);
-      translate([0,0,-led_recess_h]) cylinder(d=led_recess_d, h=led_recess_h + 1);
     }
 
     // back-wall slots for the board-mounted jacks and the Seed's micro-USB,
@@ -191,13 +184,6 @@ module shell() {
   }
 
   // STEP 2 — interior features added after the main difference
-
-  // bearing collars under each pot shaft (side loads go into the case, not the PCB)
-  for (p = concat([for (x = level_x) [x, level_s]], [for (x = mid_pot_x) [x, mid_s]]))
-    on_panel(p[0], p[1]) difference() {
-      translate([0,0,-top_t - pot_collar_h]) cylinder(d=pot_collar_od, h=pot_collar_h + top_t - 1);  // overlaps 2.5 mm into the panel
-      translate([0,0,-top_t - pot_collar_h - 1]) cylinder(d=pot_hole, h=pot_collar_h + 2);
-    }
 
   // footswitch pads: thicken the panel locally
   for (x = fs_x) on_panel(x, fs_s) difference() {
