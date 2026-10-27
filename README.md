@@ -146,7 +146,9 @@ Open `bench/index.html` in a browser (Chrome, Safari or Firefox). Power on, star
 ## Enclosure
 
 - Wedge, front to back only: 35 mm overall at the front rising to 50 mm at the back (≈5.7° panel), 150 mm deep, 160 mm wide. ≈28 mm of clearance under the panel at the footswitches (the model echoes this value); jacks sit low on the back wall so their bodies pass under the carrier PCB.
-- Flat 5 mm removable bottom plate for a full rubber mat; six M3 SHCS counterbored from below into Ruthex heat-set inserts.
+- Flat 5 mm removable bottom plate for a full rubber mat. It's held by six M3×8 socket-head screws (four corners, front and back centre) that go up through counterbored holes in the plate into M3 heat-set inserts (Ruthex 4.6 mm) pressed into bosses along the bottom edge of the shell walls. Install the inserts from below with the shell upside down.
+
+![Bottom plate and shell bosses, from below](enclosure/renders/exploded-below.png)
 - Each footswitch: thickened panel pad plus two 8 × 8 mm columns straight down to the bottom plate, so stomps load the floor rather than the panel.
 - Panel face is completely flat (no ridges or recesses) so the shell prints face-down without supports; the back wall, square to the panel, prints vertical. The carrier sits 10.39 mm under the panel (set by the toggles) and the panel holes bear the pot shafts.
 

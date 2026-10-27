@@ -207,7 +207,7 @@ module shell() {
   // footswitch pads: thicken the panel locally
   for (x = fs_x) on_panel(x, fs_s) difference() {
     translate([0,0,-top_t - fs_pad_h]) cylinder(d=fs_pad_od, h=fs_pad_h + top_t - 1);
-    translate([0,0,-top_t - fs_pad_h - 1]) cylinder(d=fs_hole, h=fs_pad_h + 2);
+    translate([0,0,-top_t - fs_pad_h - 1]) cylinder(d=fs_hole, h=fs_pad_h + top_t + 2);   // bore through pad and panel
   }
 
   // footswitch support columns: panel underside straight down to the bottom plate
