@@ -42,7 +42,7 @@ def main():
     smd_refs = set()
     for c in root.iter("comp"):
         fields = {f.get("name"): f.text for f in c.iter("field")}
-        if "LCSC" in fields:
+        if "LCSC" in fields and not any(p.get("name") == "dnp" for p in c.iter("property")):
             fp = c.findtext("footprint")
             groups[(c.findtext("value"), fp.split(":")[1], fields["LCSC"])].append(c.get("ref"))
             smd_refs.add(c.get("ref"))

@@ -163,6 +163,10 @@ def main():
     fps["R9"].SetPosition(vec(X(44), Y(68)))
     fps["R10"].SetPosition(vec(X(66), Y(100)))
     fps["R11"].SetPosition(vec(X(66), Y(104)))
+    # input pads and output coupling, between the top pot row and the toggles
+    for ref, x, ss in [("R15", -56, 106), ("R16", -56, 102), ("R17", -34, 106), ("R18", -34, 102),
+                       ("C10", -10, 106), ("R13", -10, 102), ("C11", 22, 106), ("R14", 22, 102)]:
+        fps[ref].SetPosition(vec(X(x), Y(ss)))
 
     # silkscreen control names next to the pots (top side)
     names = ["Dry", "Loop", "-8", "+5", "+8", "Fade", "Texture"]

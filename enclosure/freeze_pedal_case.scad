@@ -75,11 +75,12 @@ led_hole  = 5.3;   // 5 mm LED or light pipe
 
 
 // Under-panel features
-pot_body_h    = 7;                          // Alpha RV09AF-40 (vertical) mounting height;
+pot_body_h    = 7.6;                        // Alpha RV09AF-40: 6.8 body + 0.8 front boss (datasheet p.3);
                                             // shaft length L is measured from the PCB seating plane
-toggle_body_h = 6.6;                        // E-Switch 100SP1T1B1M2QE: PCB to bushing base (M2 drawing)
+toggle_body_h = 8.89 + 1.5;                 // E-Switch 100SP1T1B1M2QE: single-pole body 8.89 (catalog p.2)
+                                            // + 1.5 pin standoff (M2 drawing p.8: 6.60 - 5.10) = PCB to bushing base
 toggle_bush_l = 8.89;                       // B1 threaded 1/4-40 bushing length
-pcb_gap       = max(pot_body_h + 0.5, toggle_body_h);  // pots set the gap; the panel holes bear their shafts
+pcb_gap       = max(pot_body_h + 0.5, toggle_body_h);  // toggles set the gap: bushing base seats on the panel underside
 toggle_pad_h  = pcb_gap - toggle_body_h;    // underside pad so each toggle body seats on the panel
 toggle_pad_od = 12;
 fs_pad_od     = 30;  fs_pad_h = 1.5;        // thickens panel to top_t+1.5 at switches
@@ -98,12 +99,14 @@ pcb_mounts  = [[-70, 62], [70, 62], [-70, 138], [70, 138]];   // hanging M3 stan
 pcb_bot_z   = -(top_t + pcb_gap + pcb_t);       // carrier underside, panel frame
 
 // Underside parts on the rear edge — VERIFY against the parts you buy
-jack_axis_below = 9.1;   // Neutrik NMJ6HCD2: axis 9.1 mm from the PCB
+jack_axis_below = 15.67 - 8.14;  // Neutrik NMJ6HCD2 drawing: body 15.67 tall, axis 8.14 below its top = 7.53 from the PCB
 jack_body = [18.2, 23.53, 15.67];  // NMJ6HCD2 body w, length behind the panel flange, height
 seed_hdr_h  = 8.5;       // female header height
-seed_len = 51; seed_w = 17.8; seed_t = 1.6;     // Daisy Seed
+seed_len = 51; seed_w = 18; seed_t = 1.6;       // Daisy Seed3 (datasheet v2.1 p.8)
+seed_spacer = 2.5;                               // male-header plastic spacer under the Seed3
+seed_usb_h  = 3.25;                              // Seed3 USB-C receptacle height; overhangs the board end by 1.55
 seed_x   = 48;                                   // Seed centre X; its micro-USB faces the back wall
-usb_axis_below = seed_hdr_h + seed_t + 1.5;      // micro-USB axis below the carrier underside
+usb_axis_below = seed_hdr_h + seed_spacer + seed_t + seed_usb_h/2;   // USB-C axis below the carrier underside
 
 // Bottom plate screws (world X, Y) — inside corners plus front/back centre
 corner_in = m3_boss_d/2 - 0.5;   // boss centre inset from inner walls (boss fuses 0.5 mm into wall)
@@ -121,7 +124,7 @@ plate_boss_h = 10;
 // Back face. X as the player sees it (In L at far left).
 jack_d    = 11.4;  // NMJ6HCD2 panel cut-out (datasheet); nut A/F 11
 jack_x    = [-54, -30, -6, 18];          // In L, In R, Out L, Out R
-usb_open  = [12, 8];                     // micro-USB plug overmould clearance (w, h)
+usb_open  = [14, 9];                     // USB-C plug overmould clearance (w, h); many overmoulds are 12–12.5 mm wide
 
 // Note: the panel's true (perpendicular) thickness is top_t·cos(slope), so
 // features that hang from the underside overlap 1 mm short of the face to fuse.
@@ -130,8 +133,13 @@ usb_open  = [12, 8];                     // micro-USB plug overmould clearance (
 fs_clear = ztop(y_of(fs_s)) - plate_t - top_t - fs_pad_h;
 echo(str("Footswitch clearance below panel: ", fs_clear, " mm (check switch body + lugs)"));
 echo(str("Panel slope: ", slope, " deg"));
-echo(str("20 mm pot shaft above panel: ", 20 - pcb_gap - top_t, " mm"));
+pot_shaft_l = 25;                         // Alpha RV09AF-40-25K: L measured from the PCB
+led_h = 8.6; led_spacer = pcb_gap + top_t - led_h - 0.3;   // 5 mm LED on a spacer, dome 0.3 mm below the panel top
+echo(str("Pot shaft above panel: ", pot_shaft_l - pcb_gap - top_t, " mm"));
+echo(str("LED spacer length: ", led_spacer, " mm"));
+echo(str("Board gap under panel: ", pcb_gap, " mm"));
 echo(str("Toggle thread above panel: ", toggle_bush_l - toggle_pad_h - top_t, " mm (1/4-40 nut ≈2.4 mm)"));
+echo(str("Seed3 bottom (USB-C face) below carrier: ", usb_axis_below + seed_usb_h/2, " mm"));
 
 // ── 4. Helpers ──────────────────────────────────────────────────────
 module on_panel(x, s) {
@@ -245,8 +253,10 @@ module carrier() {
     color("DimGray") for (x = jack_x)
       translate([x - jack_body[0]/2, pcb_s1 - jack_body[1], pcb_bot_z - jack_body[2]]) cube(jack_body);
     // Daisy Seed hanging on headers, micro-USB end at the rear edge
-    color("RoyalBlue") translate([seed_x - seed_w/2, pcb_s1 - seed_len, pcb_bot_z - seed_hdr_h - seed_t])
+    color("RoyalBlue") translate([seed_x - seed_w/2, pcb_s1 - seed_len, pcb_bot_z - seed_hdr_h - seed_spacer - seed_t])
       cube([seed_w, seed_len, seed_t]);
+    color("Silver") translate([seed_x - 4.17, pcb_s1 - 6, pcb_bot_z - usb_axis_below - seed_usb_h/2])
+      cube([8.34, 7.55, seed_usb_h]);                       // USB-C, 1.55 past the Seed board end
     color("Black") for (dx = [-seed_w/2 + 1.3, seed_w/2 - 3.8])
       translate([seed_x + dx, pcb_s1 - seed_len + 1, pcb_bot_z - seed_hdr_h]) cube([2.5, seed_len - 2, seed_hdr_h]);
   }
