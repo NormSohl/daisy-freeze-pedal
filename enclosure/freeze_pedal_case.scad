@@ -27,13 +27,14 @@ m3_cb_d=5.8;  m3_cb_h=3.5;
 
 // ── 3. Primary dimensions ───────────────────────────────────────────
 back_w   = 160;   // outer width at the back
-front_w  = 140;   // outer width at the front (= back_w for a plain wedge)
+front_w  = back_w; // outer width at the front (set smaller for a plan taper)
 depth    = 150;   // front to back
-h_front  = 34;    // shell height at the front edge (above the bottom plate)
+plate_t  = 5;     // bottom plate (thick enough for M3 counterbores from below)
+front_total = 19.05;              // overall front edge height incl. bottom plate (3/4")
+h_front  = front_total - plate_t; // shell height at the front edge (above the bottom plate)
 h_back   = 62;    // shell height at the back edge
 wall     = 3;     // side / front / back walls
 top_t    = 3.5;   // top panel thickness
-plate_t  = 5;     // bottom plate (thick enough for M3 counterbores from below)
 
 slope    = atan((h_back - h_front) / depth);   // panel angle, ≈10.6°
 slope_len= depth / cos(slope);
@@ -44,16 +45,16 @@ function y_of(s)   = s * cos(slope);
 
 // ── Controls (panel coordinates: x, s) ──────────────────────────────
 // Top row: output levels, left→right as the player sees them
-level_s   = 125;
+level_s   = 138;
 level_x   = [-56, -28, 0, 28, 56];     // Dry, Loop, −8, +5, +8
 // Middle row: Fade, Texture pots + two mini toggles
-mid_s     = 92;
+mid_s     = 110;
 mid_pot_x = [-52, -24];                // Fade, Texture
 toggle_x  = [14, 44];                  // Single/Multi, +5 up/down
 // Footswitch row (Clear left, Freeze right), LED above Freeze
-fs_s      = 32;
+fs_s      = 55;    // far enough back for footswitch body depth (see echo below)
 fs_x      = [-35, 35];
-led_x     = 35;   led_s = 56;
+led_x     = 35;   led_s = 78;
 
 // Hole sizes — VERIFY against the parts you buy
 pot_hole  = 7.0;   // 6 mm plastic shaft, 0.5 mm clearance per side
@@ -63,7 +64,7 @@ led_hole  = 5.3;   // 5 mm LED or light pipe
 led_recess_d = 9; led_recess_h = 1.5;  // shallow well so a shoe can't flatten it
 
 // Kick ridge between the footswitch row and the knob rows
-ridge_s   = 72;
+ridge_s   = 90;
 ridge_w   = 6;
 ridge_h   = 9;     // above panel surface
 
@@ -78,7 +79,7 @@ col_offset    = 20;                         // column centre distance from switc
 col_gap       = 0.2;                        // column foot clearance above bottom plate
 
 // Carrier PCB mounting (hanging M3 standoffs, panel coordinates)
-pcb_mounts = [[-66, 80], [66, 80], [-66, 138], [66, 138]];
+pcb_mounts = [[-66, 100], [66, 100], [-66, 148], [66, 148]];
 
 // Bottom plate screws (world X, Y) — inside corners plus front/back centre
 corner_in = m3_boss_d/2 - 0.5;   // boss centre inset from inner walls (boss fuses 0.5 mm into wall)
@@ -102,6 +103,11 @@ usb_screw_sp = 0;                          // set to the module's hole spacing, 
 
 // Note: the panel's true (perpendicular) thickness is top_t·cos(slope), so
 // features that hang from the underside overlap 1 mm short of the face to fuse.
+
+// Clearance under each footswitch: panel underside (incl. pad) down to the plate top
+fs_clear = ztop(y_of(fs_s)) - plate_t - top_t - fs_pad_h;
+echo(str("Footswitch clearance below panel: ", fs_clear, " mm (check switch body + lugs)"));
+echo(str("Panel slope: ", slope, " deg"));
 
 // ── 4. Helpers ──────────────────────────────────────────────────────
 module on_panel(x, s) {
