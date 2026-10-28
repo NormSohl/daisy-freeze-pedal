@@ -96,7 +96,7 @@ part("U1", "carrier:DaisySeed", "Daisy Seed3", "carrier:DaisySeed_Socket_2x20", 
 
 for i, (label, net, _) in enumerate(POTS):
     part(f"RV{i+1}", "Device:R_Potentiometer", f"B10K {label}", "carrier:Potentiometer_Alpha_RV09AF-40_Vertical",
-         (50, 40 + i * 30), {"1": "GND", "2": net, "3": "+3V3A"}, MPN="Alpha RV09AF-40-25K-B10K (25 mm knurled shaft)")
+         (50, 40 + i * 30), {"1": "GND", "2": net, "3": "+3V3A"}, MPN="Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)")
 
 JACK_FP = "carrier:Jack_6.35mm_Neutrik_NMJ6HCD2_Horizontal_FabOnlySilk"
 jacks = [

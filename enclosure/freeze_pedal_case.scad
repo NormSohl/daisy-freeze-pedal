@@ -43,7 +43,7 @@ back_total  = 50;                // overall back edge height incl. bottom plate
 h_front  = front_total - plate_t; // shell height at the front edge (above the bottom plate)
 h_back   = back_total - plate_t;  // shell height at the back edge
 wall     = 3;     // side / front / back walls
-top_t    = 3.5;   // top panel thickness
+top_t    = 2.5;   // top panel thickness (thin so the 20 mm pot shafts stand ~7 mm proud)
 
 slope    = atan((h_back - h_front) / depth);   // panel angle
 slope_len= depth / cos(slope);
@@ -133,7 +133,7 @@ usb_open  = [14, 9];                     // USB-C plug overmould clearance (w, h
 fs_clear = ztop(y_of(fs_s)) - plate_t - top_t - fs_pad_h;
 echo(str("Footswitch clearance below panel: ", fs_clear, " mm (check switch body + lugs)"));
 echo(str("Panel slope: ", slope, " deg"));
-pot_shaft_l = 25;                         // Alpha RV09AF-40-25K: L measured from the PCB
+pot_shaft_l = 20;                         // Alpha RV09AF-40-20K (stocked; 25 mm is not): L measured from the PCB
 led_h = 8.6; led_spacer = pcb_gap + top_t - led_h - 0.3;   // 5 mm LED on a spacer, dome 0.3 mm below the panel top
 echo(str("Pot shaft above panel: ", pot_shaft_l - pcb_gap - top_t, " mm"));
 echo(str("LED spacer length: ", led_spacer, " mm"));

@@ -47,19 +47,19 @@ Fixed in firmware: grain spread, drift (random per-grain detune), output level. 
 
 | Part | Choice | Notes |
 |---|---|---|
-| Pots (×7) | Alpha RV09AF-40-25K-B10K: 9 mm, vertical PCB mount, 25 mm knurled plastic shaft, B10K linear (same series as [Jameco 2272207](https://www.jameco.com/z/RV09AF-40-20K-B10K-Taiwan-Alpha-9mm-Linear-Taper-Potentiometer-10K-Ohm-50mW-20-20mm-Long-Vertical-Knurled-Shaft_2272207.html), 25 mm length) | 7.6 mm tall body. Used bare, no knobs or caps: the knurled shaft is the grip, with a painted index line across its top face. |
+| Pots (×7) | Alpha RV09AF-40-20K-B10K: 9 mm, vertical PCB mount, 20 mm knurled plastic shaft, B10K linear ([Jameco 2272207](https://www.jameco.com/z/RV09AF-40-20K-B10K-Taiwan-Alpha-9mm-Linear-Taper-Potentiometer-10K-Ohm-50mW-20-20mm-Long-Vertical-Knurled-Shaft_2272207.html), also Mouser and Tayda; the 25 mm length isn't stocked) | 7.6 mm tall body. Used bare, no knobs or caps: the knurled shaft is the grip, with a painted index line across its top face. |
 | Toggles (×2) | E-Switch 100SP1T1B1M2QE: SPDT on-on, PCB mount (M2), threaded 1/4"-40 bushing (B1, 8.89 mm) | Catalog p.2: single-pole body 8.89 mm; M2 drawing p.8: pins stand the body 1.5 mm off the board. Bushing base sits 10.39 mm above the PCB and seats on the panel underside; 5.4 mm of thread above the panel takes the nut. The B4 variant's bushing is unthreaded. |
 | Footswitches (×2) | Soft-touch momentary SPST, M12 bushing | Panel-mounted, wired to the carrier. |
 | Jacks (×3) | Neutrik NMJ6HCD2: 1/4" stereo, switched, horizontal PCB, chrome ferrule with nut | Axis 7.53 mm from the PCB (drawing: 15.67 body, axis 8.14 below its top), 18.2 mm wide, 11.4 mm panel cut-out, panels under 4.7 mm. Mounted on the carrier underside. |
 | Seed sockets | 2× 1×20 female headers, 2.54 mm, 8.5 mm tall | Seed3 hangs below the carrier on its 2.5 mm header spacer, USB-C to the back wall. |
-| LED | 5 mm bi-colour red/green, common cathode, 3-lead, on a 5 mm LED spacer | Spacer puts the dome 0.3 mm below the panel top. Driven from two GPIOs through 470 Ω; pick R per die once the LED is chosen (a true-green die needs less). |
+| LED | 5 mm bi-colour red/green, common cathode, 3-lead, on a 4 mm LED spacer | Spacer puts the dome 0.3 mm below the panel top. Driven from two GPIOs through 470 Ω; pick R per die once the LED is chosen (a true-green die needs less). |
 | Footswitch connectors (×2) | JST PH 2-pin vertical (B2B-PH-K) | Footswitches are wired to mating plugs. |
 | Output coupling (×2 each) | 10 µF 25 V X7R radial MLCC (5 mm leads), 100 k ¼ W | One capacitor in series and one resistor to ground per output. |
 | LED resistors (×2) | 470 Ω ¼ W | |
 
 The full list is in [`pcb/carrier/fab/bom.csv`](pcb/carrier/fab/bom.csv): 26 parts, all through-hole. Add two 1×20 female headers for the Seed3 and two JST PH plugs with leads for the footswitches.
 
-Board stack (from the datasheets): the toggle's bushing base sits 10.39 mm above the board, so the carrier hangs 10.39 mm under the 3.5 mm panel. Pot bodies (7.6 mm) sit below the panel and the panel holes bear their shafts. RV09 shaft length L is measured from the PCB, so a 25 mm shaft stands 11.1 mm above the panel.
+Board stack (from the datasheets): the toggle's bushing base sits 10.39 mm above the board, so the carrier hangs 10.39 mm under the 2.5 mm panel. Pot bodies (7.6 mm) sit below the panel and the panel holes bear their shafts. RV09 shaft length L is measured from the PCB, so a 20 mm shaft stands 7.1 mm above the panel. The panel is 2.5 mm (not thicker) to keep that grip; the board height is fixed by the toggles, so only a thinner panel adds shaft.
 
 ## Carrier board
 
@@ -145,7 +145,7 @@ Open `bench/index.html` in a browser (Chrome, Safari or Firefox). Power on, star
 
 ## Enclosure
 
-- Wedge, front to back only: 35 mm overall at the front rising to 50 mm at the back (≈5.7° panel), 150 mm deep, 160 mm wide. ≈28 mm of clearance under the panel at the footswitches (the model echoes this value); jacks sit low on the back wall so their bodies pass under the carrier PCB.
+- Wedge, front to back only: 35 mm overall at the front rising to 50 mm at the back (≈5.7° panel), 150 mm deep, 160 mm wide. ≈29 mm of clearance under the panel at the footswitches (the model echoes this value); jacks sit low on the back wall so their bodies pass under the carrier PCB.
 - Flat 5 mm removable bottom plate for a full rubber mat. It's held by six M3×8 socket-head screws (four corners, front and back centre) that go up through counterbored holes in the plate into M3 heat-set inserts (Ruthex 4.6 mm) pressed into bosses along the bottom edge of the shell walls. Install the inserts from below with the shell upside down.
 
 ![Bottom plate and shell bosses, from below](enclosure/renders/exploded-below.png)
@@ -157,7 +157,7 @@ Open `bench/index.html` in a browser (Chrome, Safari or Firefox). Power on, star
 - `part = "carrier"` renders the board, jacks and Seed as reference geometry for fit checks.
 - Print the shell face down (panel face on the bed). 4+ perimeters, 40%+ gyroid, 100% infill around the footswitch pads.
 
-Part dimensions in the SCAD file come from the datasheets (Alpha RV09, E-Switch 100 series, Neutrik NMJ6HCD2, Seed3 v2.1). The footswitch body depth is the one value still to confirm against the switch you buy; there is about 28 mm of clearance.
+Part dimensions in the SCAD file come from the datasheets (Alpha RV09, E-Switch 100 series, Neutrik NMJ6HCD2, Seed3 v2.1). The footswitch body depth is the one value still to confirm against the switch you buy; there is about 29 mm of clearance.
 
 ## License
 

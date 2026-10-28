@@ -8,13 +8,13 @@ Qty,References,Value,Part
 1,J5,Out R (ring switch = plug detect),Neutrik NMJ6HCD2
 2,R1 R2,470,470R 1/4 W (choose per LED)
 2,R3 R4,100k,100k 1/4 W metal film
-1,RV1,B10K Dry,Alpha RV09AF-40-25K-B10K (25 mm knurled shaft)
-1,RV2,B10K Loop,Alpha RV09AF-40-25K-B10K (25 mm knurled shaft)
-1,RV3,B10K −8,Alpha RV09AF-40-25K-B10K (25 mm knurled shaft)
-1,RV4,B10K +5,Alpha RV09AF-40-25K-B10K (25 mm knurled shaft)
-1,RV5,B10K +8,Alpha RV09AF-40-25K-B10K (25 mm knurled shaft)
-1,RV6,B10K Fade,Alpha RV09AF-40-25K-B10K (25 mm knurled shaft)
-1,RV7,B10K Texture,Alpha RV09AF-40-25K-B10K (25 mm knurled shaft)
+1,RV1,B10K Dry,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
+1,RV2,B10K Loop,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
+1,RV3,B10K −8,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
+1,RV4,B10K +5,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
+1,RV5,B10K +8,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
+1,RV6,B10K Fade,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
+1,RV7,B10K Texture,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
 1,SW1,Single / Multi,E-Switch 100SP1T1B1M2QE
 1,SW2,+5 up / down,E-Switch 100SP1T1B1M2QE
 1,U1,Daisy Seed3,Electrosmith Daisy Seed3 (on 2x 1x20 female headers)
