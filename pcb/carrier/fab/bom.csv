@@ -1,8 +1,8 @@
 Qty,References,Value,Part
 2,C1 C2,10u,"10 uF ≥25 V X7R radial MLCC, 5.08 mm leads (e.g. TDK FG20X7R1H106KRT06, 50 V, on Digi-Key)"
 1,D1,Red/Green,"5 mm bi-colour LED, common cathode (red/green), on a 4 mm spacer"
-1,J1,Freeze footswitch,"JST B2B-PH-K; footswitch: soft-touch momentary SPST, panel mounted"
-1,J2,Clear footswitch,"JST B2B-PH-K; footswitch: soft-touch momentary SPST, panel mounted"
+1,J1,Freeze footswitch,"No connector: solder 24-26 AWG leads into the J pads (either way round). Footswitch: soft-touch momentary SPST, panel mounted (Tayda)"
+1,J2,Clear footswitch,"No connector: solder 24-26 AWG leads into the J pads (either way round). Footswitch: soft-touch momentary SPST, panel mounted (Tayda)"
 1,J3,In (mono; grounded when empty),Neutrik NMJ6HCD2
 1,J4,Out L / Mono,Neutrik NMJ6HCD2
 1,J5,Out R (ring switch = plug detect),Neutrik NMJ6HCD2
