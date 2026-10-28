@@ -117,9 +117,9 @@ part("C2", "Device:C", "10u", C_TH, (395, 145), {"1": "OUT_R", "2": "JOUT_R"}, r
 part("R4", "Device:R", "100k", R_TH, (410, 155), {"1": "JOUT_R", "2": "GND"}, MPN="100k 1/4 W metal film")
 
 part("SW1", "Switch:SW_SPDT", "Single / Multi", "carrier:SW_E-Switch_100SP_M2_PCB", (300, 225),
-     {"1": "GND", "2": "TGL_LAYERS", "3": "+3V3D"}, MPN="E-Switch 100SP1T1B1M2QEH (H = with nuts; 100SP1T1B1M2QE without)")
+     {"1": "GND", "2": "TGL_LAYERS", "3": "+3V3D"}, MPN="E-Switch 100SP1T1B1M2RE (gold contacts; any 100SP1…M2 fits)")
 part("SW2", "Switch:SW_SPDT", "+5 up / down", "carrier:SW_E-Switch_100SP_M2_PCB", (350, 225),
-     {"1": "GND", "2": "TGL_FIFTH_DIR", "3": "+3V3D"}, MPN="E-Switch 100SP1T1B1M2QEH (H = with nuts; 100SP1T1B1M2QE without)")
+     {"1": "GND", "2": "TGL_FIFTH_DIR", "3": "+3V3D"}, MPN="E-Switch 100SP1T1B1M2RE (gold contacts; any 100SP1…M2 fits)")
 
 FS_FP = "Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical"
 part("J1", "Connector_Generic:Conn_01x02", "Freeze footswitch", FS_FP, (140, 225), {"1": "FS_FREEZE", "2": "GND"},

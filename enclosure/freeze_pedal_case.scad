@@ -77,7 +77,7 @@ led_hole  = 5.3;   // 5 mm LED or light pipe
 // Under-panel features
 pot_body_h    = 7.6;                        // Alpha RV09AF-40: 6.8 body + 0.8 front boss (datasheet p.3);
                                             // shaft length L is measured from the PCB seating plane
-toggle_body_h = 8.89 + 1.5;                 // E-Switch 100SP1T1B1M2QE: single-pole body 8.89 (catalog p.2)
+toggle_body_h = 8.89 + 1.5;                 // E-Switch 100SP1T1B1M2RE (same body as …QE): single-pole body 8.89 (catalog p.2)
                                             // + 1.5 pin standoff (M2 drawing p.8: 6.60 - 5.10) = PCB to bushing base
 toggle_bush_l = 8.89;                       // B1 threaded 1/4-40 bushing length
 pcb_gap       = max(pot_body_h + 0.5, toggle_body_h);  // toggles set the gap: bushing base seats on the panel underside

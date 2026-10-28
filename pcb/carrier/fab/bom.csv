@@ -15,6 +15,6 @@ Qty,References,Value,Part
 1,RV5,B10K +8,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
 1,RV6,B10K Fade,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
 1,RV7,B10K Texture,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
-1,SW1,Single / Multi,E-Switch 100SP1T1B1M2QEH (H = with nuts; 100SP1T1B1M2QE without)
-1,SW2,+5 up / down,E-Switch 100SP1T1B1M2QEH (H = with nuts; 100SP1T1B1M2QE without)
+1,SW1,Single / Multi,E-Switch 100SP1T1B1M2RE (gold contacts; any 100SP1…M2 fits)
+1,SW2,+5 up / down,E-Switch 100SP1T1B1M2RE (gold contacts; any 100SP1…M2 fits)
 1,U1,Daisy Seed3,Electrosmith Daisy Seed3 (on 2x 1x20 female headers)
