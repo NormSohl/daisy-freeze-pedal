@@ -1,6 +1,6 @@
 Qty,References,Value,Part
-2,C1 C2,10u,"10 uF 25 V X7R radial MLCC, 5.08 mm leads (e.g. TDK FG28X7R1E106KRT06)"
-1,D1,Red/Green,"5 mm bi-colour LED, common cathode (red/green), on a 5 mm spacer"
+2,C1 C2,10u,"10 uF ≥25 V X7R radial MLCC, 5.08 mm leads (e.g. TDK FG20X7R1H106KRT06, 50 V, on Digi-Key)"
+1,D1,Red/Green,"5 mm bi-colour LED, common cathode (red/green), on a 4 mm spacer"
 1,J1,Freeze footswitch,"JST B2B-PH-K; footswitch: soft-touch momentary SPST, panel mounted"
 1,J2,Clear footswitch,"JST B2B-PH-K; footswitch: soft-touch momentary SPST, panel mounted"
 1,J3,In (mono; grounded when empty),Neutrik NMJ6HCD2
@@ -15,6 +15,6 @@ Qty,References,Value,Part
 1,RV5,B10K +8,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
 1,RV6,B10K Fade,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
 1,RV7,B10K Texture,Alpha RV09AF-40-20K-B10K (20 mm knurled shaft)
-1,SW1,Single / Multi,E-Switch 100SP1T1B1M2QE
-1,SW2,+5 up / down,E-Switch 100SP1T1B1M2QE
+1,SW1,Single / Multi,E-Switch 100SP1T1B1M2QEH (H = with nuts; 100SP1T1B1M2QE without)
+1,SW2,+5 up / down,E-Switch 100SP1T1B1M2QEH (H = with nuts; 100SP1T1B1M2QE without)
 1,U1,Daisy Seed3,Electrosmith Daisy Seed3 (on 2x 1x20 female headers)

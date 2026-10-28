@@ -110,16 +110,16 @@ for i, (ref, val, pins) in enumerate(jacks):
 
 # Output coupling (Seed3 reference circuit puts 10u in series at each output); 100k bleeds DC so plugging in doesn't pop
 part("C1", "Device:C", "10u", C_TH, (395, 95), {"1": "OUT_L", "2": "JOUT_L"}, rot=90,
-     MPN="10 uF 25 V X7R radial MLCC, 5.08 mm leads (e.g. TDK FG28X7R1E106KRT06)")
+     MPN="10 uF ≥25 V X7R radial MLCC, 5.08 mm leads (e.g. TDK FG20X7R1H106KRT06, 50 V, on Digi-Key)")
 part("R3", "Device:R", "100k", R_TH, (410, 105), {"1": "JOUT_L", "2": "GND"}, MPN="100k 1/4 W metal film")
 part("C2", "Device:C", "10u", C_TH, (395, 145), {"1": "OUT_R", "2": "JOUT_R"}, rot=90,
-     MPN="10 uF 25 V X7R radial MLCC, 5.08 mm leads (e.g. TDK FG28X7R1E106KRT06)")
+     MPN="10 uF ≥25 V X7R radial MLCC, 5.08 mm leads (e.g. TDK FG20X7R1H106KRT06, 50 V, on Digi-Key)")
 part("R4", "Device:R", "100k", R_TH, (410, 155), {"1": "JOUT_R", "2": "GND"}, MPN="100k 1/4 W metal film")
 
 part("SW1", "Switch:SW_SPDT", "Single / Multi", "carrier:SW_E-Switch_100SP_M2_PCB", (300, 225),
-     {"1": "GND", "2": "TGL_LAYERS", "3": "+3V3D"}, MPN="E-Switch 100SP1T1B1M2QE")
+     {"1": "GND", "2": "TGL_LAYERS", "3": "+3V3D"}, MPN="E-Switch 100SP1T1B1M2QEH (H = with nuts; 100SP1T1B1M2QE without)")
 part("SW2", "Switch:SW_SPDT", "+5 up / down", "carrier:SW_E-Switch_100SP_M2_PCB", (350, 225),
-     {"1": "GND", "2": "TGL_FIFTH_DIR", "3": "+3V3D"}, MPN="E-Switch 100SP1T1B1M2QE")
+     {"1": "GND", "2": "TGL_FIFTH_DIR", "3": "+3V3D"}, MPN="E-Switch 100SP1T1B1M2QEH (H = with nuts; 100SP1T1B1M2QE without)")
 
 FS_FP = "Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical"
 part("J1", "Connector_Generic:Conn_01x02", "Freeze footswitch", FS_FP, (140, 225), {"1": "FS_FREEZE", "2": "GND"},
@@ -128,7 +128,7 @@ part("J2", "Connector_Generic:Conn_01x02", "Clear footswitch", FS_FP, (140, 250)
      MPN="JST B2B-PH-K; footswitch: soft-touch momentary SPST, panel mounted")
 
 part("D1", "Device:LED_Dual_AKA", "Red/Green", "LED_THT:LED_D5.0mm-3", (230, 245),
-     {"1": "LED_RED", "2": "GND", "3": "LED_GRN"}, MPN="5 mm bi-colour LED, common cathode (red/green), on a 5 mm spacer")
+     {"1": "LED_RED", "2": "GND", "3": "LED_GRN"}, MPN="5 mm bi-colour LED, common cathode (red/green), on a 4 mm spacer")
 part("R1", "Device:R", "470", R_TH, (200, 240), {"1": "LED_RED_DRV", "2": "LED_RED"}, rot=90, MPN="470R 1/4 W (choose per LED)")
 part("R2", "Device:R", "470", R_TH, (200, 252), {"1": "LED_GRN_DRV", "2": "LED_GRN"}, rot=90, MPN="470R 1/4 W (choose per LED)")
 
